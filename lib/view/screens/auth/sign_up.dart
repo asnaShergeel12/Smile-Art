@@ -8,6 +8,7 @@ import 'package:smile_art/constant/app_style.dart';
 import 'package:smile_art/controller/sign_up_controller.dart';
 import '../../../constant/app_colors.dart';
 import '../../../generated/assets.dart';
+import '../../../utils/app_validators.dart';
 import '../../widgets/auth_appbar.dart';
 import '../../widgets/common_image_widget.dart';
 import '../../widgets/custom_check_box.dart';
@@ -83,18 +84,19 @@ class SignUp extends StatelessWidget {
                 MyTextField(
                   label: "Full Name",
                   controller: signupController.nameController,
-                  validator: signupController.validateName,
+                  validator: (value) => AppValidators.instance
+                      .validateRepeatPassword(value, signupController.nameController.text),
 
                 ),
                 MyTextField(
                   label: "Email Address",
                   controller: signupController.emailController,
-                  validator: signupController.validateEmail,
+                  validator: (value)=>AppValidators.instance.validateEmail(signupController.emailController.text),
                 ),
                 MyTextField(
                   label: "Create Password",
                   controller: signupController.createPasswordController,
-                  validator: signupController.validatePassword,
+                  validator: (value)=>AppValidators.instance.validatePassword(signupController.createPasswordController.text),
                   isObSecure: true,
                   suffixIcon: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -106,9 +108,10 @@ class SignUp extends StatelessWidget {
                 MyTextField(
                   label: "Repeat Password",
                   controller: signupController.repeatPasswordController,
-                  validator: signupController.validateRepeatPassword,
+                  validator: (value)=> AppValidators.instance.validateRepeatPassword(
+                      signupController.createPasswordController.text,
+                      signupController.repeatPasswordController.text),
                   isObSecure: true,
-
                   suffixIcon: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: CommonImageView(
@@ -181,7 +184,7 @@ class SignUp extends StatelessWidget {
                         if(Platform.isAndroid || Platform.isIOS){
                           bool isSuccess = await signupController.signInWithGoogle();
                           if(isSuccess){
-                            // Get.to(() => OTP());
+                            Get.to(() => OTP());
                           }
                         }
                       },

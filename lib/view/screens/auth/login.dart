@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:smile_art/constant/app_style.dart';
 import 'package:smile_art/controller/login_controller.dart';
+import 'package:smile_art/utils/app_validators.dart';
 import '../../../constant/app_colors.dart';
 import '../../../generated/assets.dart';
 import '../../widgets/auth_appbar.dart';
@@ -74,20 +75,23 @@ class Login extends StatelessWidget {
                 ),
                 MyText(
                   text:
-                  "Login to your account to discover and buy the best photographs effortlessly.",
+                      "Login to your account to discover and buy the best photographs effortlessly.",
                   color: kGreyColor,
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextField(label: "Email Address",
+                MyTextField(
+                  label: "Email Address",
                   controller: loginController.emailController,
-                  validator: loginController.validateEmail,
+                  validator: (value) => AppValidators.instance
+                      .validateEmail(loginController.emailController.text),
                 ),
                 MyTextField(
                   label: "Password",
                   controller: loginController.passwordController,
-                  validator: loginController.validatePassword,
+                  validator: (value) => AppValidators.instance.validatePassword(
+                      loginController.passwordController.text),
                   isObSecure: true,
                   suffixIcon: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -145,8 +149,8 @@ class Login extends StatelessWidget {
                   children: [
                     const Expanded(
                         child: Divider(
-                          color: kBorderColor,
-                        )),
+                      color: kBorderColor,
+                    )),
                     const SizedBox(
                       width: 18,
                     ),
@@ -156,8 +160,8 @@ class Login extends StatelessWidget {
                     ),
                     const Expanded(
                         child: Divider(
-                          color: kBorderColor,
-                        )),
+                      color: kBorderColor,
+                    )),
                   ],
                 ),
                 const SizedBox(
