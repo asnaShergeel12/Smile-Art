@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:smile_art/binding/forgot_password_binding.dart';
 import 'package:smile_art/constant/app_style.dart';
 import 'package:smile_art/controller/login_controller.dart';
 import 'package:smile_art/utils/app_validators.dart';
@@ -15,7 +16,7 @@ import '../../widgets/my_text_field.dart';
 import '../../widgets/my_text_widget.dart';
 import '../../widgets/rich_texts.dart';
 import '../bottom_bar/bottom_navbar.dart';
-import 'reset_password.dart';
+import 'forgot_password.dart';
 import 'sign_up.dart';
 
 class Login extends StatelessWidget {
@@ -108,7 +109,7 @@ class Login extends StatelessWidget {
                       size: 14,
                       color: kRedColor,
                       onTap: () {
-                        Get.to(const ResetPassword());
+                        Get.to(()=>ForgotPassword(), binding: ForgotPasswordBinding());
                       },
                     ),
                   ],
@@ -172,7 +173,12 @@ class Login extends StatelessWidget {
                   children: [
                     CustomButton(
                       buttonText: "",
-                      onTap: () {},
+                      onTap: () async {
+                          bool isSuccess = await loginController.logInWithGoogle();
+                          if(isSuccess){
+                            Get.to(() => const CustomBottomNavBar());
+                          }
+                      },
                       customChild: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: SvgPicture.asset(Assets.imagesGoogleLogo),

@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smile_art/auth_service.dart';
 import 'package:smile_art/view/widgets/custom_snackbar.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../constant/app_colors.dart';
 
 class SignUpController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -24,58 +21,26 @@ class SignUpController extends GetxController {
   Future<String?> signup() async {
     String email = emailController.text.trim();
     String password = createPasswordController.text.trim();
+    String fullname = nameController.text.trim();
 
     try {
-      final result = await _authService.signup(email, password);
+      final result = await _authService.signup(email, password, fullname);
 
       if (result == null) {
-        Get.showSnackbar(
-          const GetSnackBar(
-            backgroundColor: kSuccessColor,
-            duration: Duration(seconds: 3),
-            snackPosition: SnackPosition.BOTTOM,
-            titleText: Text(
-              "Success",
-              style: TextStyle(color: kSecondaryColor, fontWeight: FontWeight.bold),
-            ),
-            messageText: Text(
-              "Account created successfully!",
-              style: TextStyle(color: kSecondaryColor),
-            ),
-          ),
+        CustomSnackbar.success(
+          title: "Success",
+          message: "Account created successfully!",
         );
       } else {
-        Get.showSnackbar(
-          GetSnackBar(
-            backgroundColor: kRedColor,
-            duration: const Duration(seconds: 3),
-            snackPosition: SnackPosition.BOTTOM,
-            titleText: const Text(
-              "Signup Failed",
-              style: TextStyle(color: kSecondaryColor, fontWeight: FontWeight.bold),
-            ),
-            messageText: Text(
-              "Reason: $result",
-              style: const TextStyle(color: kSecondaryColor),
-            ),
-          ),
+        CustomSnackbar.error(
+            title: "Signup Failed",
+            message: result,
         );
       }
     } catch (e) {
-      Get.showSnackbar(
-        const GetSnackBar(
-          backgroundColor: kRedColor,
-          duration: Duration(seconds: 3),
-          snackPosition: SnackPosition.BOTTOM,
-          titleText: Text(
-            "Error",
-            style: TextStyle(color:kSecondaryColor, fontWeight: FontWeight.bold),
-          ),
-          messageText: Text(
-            "Something went wrong. Please try again later.",
-            style: TextStyle(color: kSecondaryColor),
-          ),
-        ),
+      CustomSnackbar.error(
+          title: "Error",
+          message: "Something went wrong. Please try again later.",
       );
     }
     return null;

@@ -60,9 +60,11 @@
 		<key>CFBundleURLSchemes</key>
 		<array>
 			<string>com.googleusercontent.apps.734379831553-ve6gfg5don3jd0ae7aufr74ovq3fvr95</string>
+			<string>smileart</string>
 		</array>
 	</dict>
 </array>
+
 
 </dict>
 </plist>

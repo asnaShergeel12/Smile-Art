@@ -4,7 +4,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../constant/app_colors.dart';
 import 'my_text_widget.dart';
 
-// ignore: must_be_immutable
 class MyTextField extends StatefulWidget {
   MyTextField({
     super.key,
