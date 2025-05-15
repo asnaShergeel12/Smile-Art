@@ -10,4 +10,10 @@ class ForgotPasswordController extends GetxController{
   bool validateForm() {
     return formKey.currentState?.validate() ?? false;
   }
+
+  @override
+  void onClose() {
+    emailController.dispose();
+    super.onClose();
+  }
 }
