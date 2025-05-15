@@ -63,6 +63,13 @@ class SignUpController extends GetxController {
     }
   }
 
+  clearFields(){
+    nameController.clear();
+    emailController.clear();
+    createPasswordController.clear();
+    repeatPasswordController.clear();
+  }
+
   @override
   void onClose() {
     nameController.dispose();

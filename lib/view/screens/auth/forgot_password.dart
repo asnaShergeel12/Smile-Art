@@ -1,11 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smile_art/auth_service.dart';
 import 'package:smile_art/constant/app_style.dart';
 import 'package:smile_art/controller/forgot_password_controller.dart';
 import 'package:smile_art/utils/app_validators.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../binding/login_binding.dart';
 import '../../../constant/app_colors.dart';
 import '../../../generated/assets.dart';
 import '../../widgets/auth_appbar.dart';
@@ -72,6 +71,7 @@ class ForgotPassword extends StatelessWidget {
                                 .resetPasswordViaEmailLink(forgotPassController
                                     .emailController.text
                                     .trim());
+                            forgotPassController.clearField();
                             showCustomDialog(
                                 context: context,
                                 image: Assets.imagesCheckMail,
@@ -80,7 +80,7 @@ class ForgotPassword extends StatelessWidget {
                                 subtitle:
                                     "Password reset link has been sent on your email address.",
                                 onTap: () {
-                                  Get.back();
+                                  Get.to(()=>Login(), binding: LoginBinding());
                                 });
                           }
                         },
@@ -100,7 +100,7 @@ class ForgotPassword extends StatelessWidget {
                           text: "Login",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Get.to(Login());
+                              Get.to(()=>Login(), binding: LoginBinding());
                             },
                           style: const TextStyle(
                             fontSize: 14,

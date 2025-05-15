@@ -109,6 +109,7 @@ class Login extends StatelessWidget {
                       size: 14,
                       color: kRedColor,
                       onTap: () {
+                        loginController.clearFields();
                         Get.to(()=>ForgotPassword(), binding: ForgotPasswordBinding());
                       },
                     ),
@@ -138,6 +139,7 @@ class Login extends StatelessWidget {
                       if (loginController.validateForm()) {
                         bool isSuccess = await loginController.login();
                         if (isSuccess) {
+                          loginController.clearFields();
                           Get.to(const CustomBottomNavBar());
                         }
                       }

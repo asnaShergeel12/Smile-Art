@@ -10,6 +10,11 @@ class ResetPasswordController extends GetxController{
     return formKey.currentState?.validate() ?? false;
   }
 
+  clearFields(){
+    newPasswordController.clear();
+    confirmPasswordController.clear();
+  }
+
   @override
   void onClose() {
     newPasswordController.dispose();

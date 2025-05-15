@@ -13,7 +13,6 @@ import '../../widgets/my_text_widget.dart';
 
 class ResetPassword extends StatelessWidget {
   final resetPassController = Get.find<ResetPasswordController>();
-  final String token = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +23,7 @@ class ResetPassword extends StatelessWidget {
         child: MyButton(
             onTap: () {
               if (resetPassController.validateForm()) {
+                resetPassController.clearFields();
                 AuthService().updateNewPassword(
                     resetPassController.newPasswordController.text.trim());
               }

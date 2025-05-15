@@ -143,7 +143,8 @@ class SignUp extends StatelessWidget {
                       if (signupController.validateForm()) {
                         String? result = await signupController.signup(); // Wait for result
                         if (result == null) {
-                          Get.to(() => OTP()); // Navigate only on success
+                          signupController.clearFields();
+                          Get.to(() => OTP());
                         }
                       }
                     },
