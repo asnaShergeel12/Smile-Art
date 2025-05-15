@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smile_art/auth_service.dart';
+import 'package:smile_art/binding/login_binding.dart';
 import 'package:smile_art/constant/app_colors.dart';
 import 'package:smile_art/controller/reset_password_controller.dart';
 import 'package:smile_art/utils/app_validators.dart';
@@ -10,6 +11,7 @@ import '../../widgets/common_image_widget.dart';
 import '../../widgets/my_button.dart';
 import '../../widgets/my_text_field.dart';
 import '../../widgets/my_text_widget.dart';
+import 'login.dart';
 
 class ResetPassword extends StatelessWidget {
   final resetPassController = Get.find<ResetPasswordController>();
@@ -27,6 +29,7 @@ class ResetPassword extends StatelessWidget {
                 AuthService().updateNewPassword(
                     resetPassController.newPasswordController.text.trim());
               }
+              Get.to(()=>Login(), binding: LoginBinding());
             },
             buttonText: "Update"),
       ),
@@ -34,7 +37,7 @@ class ResetPassword extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SingleChildScrollView(
           child: Form(
-            key: resetPassController.formKey,
+            key: resetPassController.resetPassFormKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -60,7 +63,7 @@ class ResetPassword extends StatelessWidget {
                   label: 'Confirm Password',
                   isObSecure: true,
                   validator: (value) => AppValidators.instance
-                      .validateRepeatPassword(value,
+                      .validateRepeatPassword(resetPassController.confirmPasswordController.text,
                           resetPassController.newPasswordController.text),
                   suffixIcon: Padding(
                     padding: const EdgeInsets.all(16.0),

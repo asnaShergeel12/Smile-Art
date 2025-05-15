@@ -4,7 +4,7 @@ import 'package:smile_art/view/widgets/custom_snackbar.dart';
 import '../auth_service.dart';
 
 class LoginController extends GetxController {
-  final formKey = GlobalKey<FormState>();
+  final loginFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   RxBool isCheck = false.obs;
@@ -17,7 +17,7 @@ class LoginController extends GetxController {
   }
 
   bool validateForm() {
-    return formKey.currentState?.validate() ?? false;
+    return loginFormKey.currentState?.validate() ?? false;
   }
 
   Future<bool> login() async {

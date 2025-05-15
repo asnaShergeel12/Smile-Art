@@ -60,7 +60,7 @@ class Login extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
         child: SingleChildScrollView(
           child: Form(
-            key: loginController.formKey,
+            key: loginController.loginFormKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

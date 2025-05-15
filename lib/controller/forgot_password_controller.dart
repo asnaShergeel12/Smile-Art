@@ -4,11 +4,11 @@ import '../auth_service.dart';
 
 class ForgotPasswordController extends GetxController{
   final emailController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final forgotPassFormKey = GlobalKey<FormState>();
   final AuthService authService = AuthService();
 
   bool validateForm() {
-    return formKey.currentState?.validate() ?? false;
+    return forgotPassFormKey.currentState?.validate() ?? false;
   }
 
   clearField(){
