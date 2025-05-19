@@ -64,7 +64,7 @@ class AuthService {
     try {
       await supabase.auth.signOut();
       if (!context.mounted) return;
-      Get.to(() => Login());
+      Get.offAll(() => Login());
     } catch (e) {
       print("Logout error: $e");
     }
@@ -156,8 +156,14 @@ class AuthService {
   }
 
   Future<void> resetPasswordViaEmailLink(String email) async {
-    supabase.auth
-        .resetPasswordForEmail(email, redirectTo: 'smileart://reset-password');
+    try {
+      await supabase.auth.resetPasswordForEmail(email, redirectTo: 'smileart://reset-password');
+    } catch (e) {
+      CustomSnackbar.error(
+        title: "Error",
+        message: 'Something went wrong.\n$e',
+      );
+    }
   }
 
   void configDeepLinkForResetPassword() {
@@ -173,12 +179,12 @@ class AuthService {
   Future<bool> updateNewPassword(String newPassword) async {
     try {
       await supabase.auth.updateUser(UserAttributes(password: newPassword));
+      CustomSnackbar.success(title: "Success", message: "Password has been updated successfully!");
       return true;
     } catch (e) {
-      CustomSnackbar.success(
-          title: 'Password Updated',
-          message: 'Your password has been successfully changed!');
-      return false;
+      // log("THis was the exception while changing the password: $e");
+      CustomSnackbar.error(title: "Error", message: "Something went wrong.\n $e");
+      rethrow;
     }
   }
 }

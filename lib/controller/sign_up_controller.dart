@@ -4,8 +4,8 @@ import 'package:smile_art/auth_service.dart';
 import 'package:smile_art/view/widgets/custom_snackbar.dart';
 
 class SignUpController extends GetxController {
+  final RxBool isPasswordVisible = true.obs;
   final signupFormKey = GlobalKey<FormState>();
-
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final createPasswordController = TextEditingController();

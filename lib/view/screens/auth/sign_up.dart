@@ -1,9 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:smile_art/binding/login_binding.dart';
+import 'package:smile_art/binding/onboarding_binding.dart';
 import 'package:smile_art/constant/app_style.dart';
 import 'package:smile_art/controller/sign_up_controller.dart';
 import '../../../constant/app_colors.dart';
@@ -16,6 +17,7 @@ import '../../widgets/my_button.dart';
 import '../../widgets/my_text_field.dart';
 import '../../widgets/my_text_widget.dart';
 import '../../widgets/rich_texts.dart';
+import '../onboarding/onboarding.dart';
 import 'login.dart';
 import 'otp.dart';
 
@@ -45,7 +47,7 @@ class SignUp extends StatelessWidget {
                   text: "Login",
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      Get.to(Login());
+                      Get.to(()=>Login(), binding: LoginBinding());
                     },
                   style: const TextStyle(
                     fontSize: 14,
@@ -144,7 +146,7 @@ class SignUp extends StatelessWidget {
                         String? result = await signupController.signup(); // Wait for result
                         if (result == null) {
                           signupController.clearFields();
-                          Get.to(() => OTP());
+                          Get.to(() => Onboarding(), binding: OnboardingBinding());
                         }
                       }
                     },

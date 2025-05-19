@@ -4,7 +4,8 @@ import 'package:smile_art/view/widgets/custom_snackbar.dart';
 import '../auth_service.dart';
 
 class LoginController extends GetxController {
-  final loginFormKey = GlobalKey<FormState>();
+  final RxBool isPasswordVisible = true.obs;
+  final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   RxBool isCheck = false.obs;

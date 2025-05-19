@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ResetPasswordController extends GetxController{
+  final RxBool isPasswordVisible = true.obs;
   final newPasswordController  = TextEditingController();
   final confirmPasswordController  = TextEditingController();
   final resetPassFormKey = GlobalKey<FormState>();

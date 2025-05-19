@@ -26,21 +26,23 @@ class ChangePassword extends StatelessWidget {
         child: Column(
           crossAxisAlignment:CrossAxisAlignment.start,
           children: [
-          SizedBox(height:38,),
-          MyTextField(label: 'Password',isObSecure:true,
+          const SizedBox(height:38,),
+          MyTextField(label: 'Password',
+            // isObSecure:true,
             suffixIcon: Padding(
               padding: const EdgeInsets.all(16.0),
               child: CommonImageView(svgPath:Assets.iconsSecureIcon,),
             ),
           ),
-          SizedBox(height:8,),
-          MyTextField(label: 'Confirm Password',isObSecure:true,
+          const SizedBox(height:8,),
+          MyTextField(label: 'Confirm Password',
+            // isObSecure:true,
             suffixIcon: Padding(
               padding: const EdgeInsets.all(16.0),
               child: CommonImageView(svgPath:Assets.iconsSecureIcon,),
             ),
           ),
-          SizedBox(height:8,),
+          const SizedBox(height:8,),
           MyText(text: ". Minimum 8 Characters ",color:kGreyColor,),
           MyText(text: ". 1 Uppercase  ",color:kGreyColor,),
           MyText(text: ". 1 Lowercase  ",color:kGreyColor,),

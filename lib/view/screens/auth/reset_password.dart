@@ -23,13 +23,17 @@ class ResetPassword extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: MyButton(
-            onTap: () {
+            onTap: () async {
               if (resetPassController.validateForm()) {
+                String newPassword = resetPassController.newPasswordController.text.trim();
+                bool isUpdated = await AuthService().updateNewPassword(newPassword);
+                print("New Password: $newPassword");
                 resetPassController.clearFields();
-                AuthService().updateNewPassword(
-                    resetPassController.newPasswordController.text.trim());
+                if (isUpdated) {
+                  // Navigate to login after successful update
+                  Get.to(() => Login(), binding: LoginBinding());
+                }
               }
-              Get.to(()=>Login(), binding: LoginBinding());
             },
             buttonText: "Update"),
       ),
@@ -46,6 +50,7 @@ class ResetPassword extends StatelessWidget {
                 ),
                 MyTextField(
                   label: 'Password',
+                  controller: resetPassController.newPasswordController,
                   isObSecure: true,
                   validator: (value) =>
                       AppValidators.instance.validatePassword(value),
@@ -62,6 +67,7 @@ class ResetPassword extends StatelessWidget {
                 MyTextField(
                   label: 'Confirm Password',
                   isObSecure: true,
+                  controller: resetPassController.confirmPasswordController,
                   validator: (value) => AppValidators.instance
                       .validateRepeatPassword(resetPassController.confirmPasswordController.text,
                           resetPassController.newPasswordController.text),
