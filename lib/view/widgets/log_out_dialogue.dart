@@ -42,7 +42,7 @@ Future<void> showLogOutDialog({
                     child: MyBorderButton(buttonText: "Yes", borderColor:kBorderColor,
                         onTap: (){
                       AuthService().logout(context);
-                      Get.back();
+                      // Get.back();
                         }),),
                MyButton(onTap: (){
                  Get.back();

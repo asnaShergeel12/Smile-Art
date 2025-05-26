@@ -3,6 +3,7 @@ import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:smile_art/constant/app_colors.dart';
+import 'package:smile_art/constant/app_constants.dart';
 import 'package:smile_art/view/screens/home/notifications.dart';
 import 'package:smile_art/view/widgets/common_image_widget.dart';
 import 'package:smile_art/view/widgets/my_button.dart';
@@ -57,11 +58,12 @@ class Home extends StatelessWidget {
                     color: kPrimaryColor,
                     weight: FontWeight.w700,
                   ),
-                  MyText(
-                    text: "Hi Aiman",
-                    size: 12,
-                    weight: FontWeight.w600,
-                    color: kPrimaryColor,
+                  Obx(()=> MyText(
+                      text: userModelGlobal.value.firstName,
+                      size: 12,
+                      weight: FontWeight.w600,
+                      color: kPrimaryColor,
+                    ),
                   )
                 ],
               ),

@@ -39,9 +39,7 @@ class _ProfilePicState extends State<ProfilePic> {
   Widget build(BuildContext context) {
     return Animate(
       effects: [MoveEffect(duration: Duration(milliseconds: 400))],
-      child: Column(
-        children: [
-          Row(
+      child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Stack(
@@ -88,19 +86,6 @@ class _ProfilePicState extends State<ProfilePic> {
               ),
             ],
           ),
-          SizedBox(height:8,),
-          MyText(
-            text: "Samuel",
-            color: kSecondaryColor,
-            weight:FontWeight.w600,
-          ),
-          MyText(
-            text: "Samuel@gmail.com",
-            color: kSecondaryColor,
-            weight:FontWeight.w600,
-          ),
-        ],
-      ),
     );
   }
 }

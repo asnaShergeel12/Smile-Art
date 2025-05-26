@@ -3,6 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smile_art/binding/login_binding.dart';
 import 'package:smile_art/binding/onboarding_binding.dart';
 import 'package:smile_art/constant/app_style.dart';
@@ -47,7 +49,7 @@ class SignUp extends StatelessWidget {
                   text: "Login",
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      Get.to(()=>Login(), binding: LoginBinding());
+                      Get.to(() => Login(), binding: LoginBinding());
                     },
                   style: const TextStyle(
                     fontSize: 14,
@@ -86,19 +88,22 @@ class SignUp extends StatelessWidget {
                 MyTextField(
                   label: "Full Name",
                   controller: signupController.nameController,
+                  textCapitalization: TextCapitalization.words,
                   validator: (value) => AppValidators.instance
-                      .validateRepeatPassword(value, signupController.nameController.text),
-
+                      .validateRepeatPassword(
+                          value, signupController.nameController.text),
                 ),
                 MyTextField(
                   label: "Email Address",
                   controller: signupController.emailController,
-                  validator: (value)=>AppValidators.instance.validateEmail(signupController.emailController.text),
+                  validator: (value) => AppValidators.instance
+                      .validateEmail(signupController.emailController.text),
                 ),
                 MyTextField(
                   label: "Create Password",
                   controller: signupController.createPasswordController,
-                  validator: (value)=>AppValidators.instance.validatePassword(signupController.createPasswordController.text),
+                  validator: (value) => AppValidators.instance.validatePassword(
+                      signupController.createPasswordController.text),
                   isObSecure: true,
                   suffixIcon: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -110,10 +115,14 @@ class SignUp extends StatelessWidget {
                 MyTextField(
                   label: "Repeat Password",
                   controller: signupController.repeatPasswordController,
-                  validator: (value)=> AppValidators.instance.validateRepeatPassword(
-                      signupController.createPasswordController.text,
-                      signupController.repeatPasswordController.text),
+                  validator: (value) => AppValidators.instance
+                      .validateRepeatPassword(
+                          signupController.createPasswordController.text,
+                          signupController.repeatPasswordController.text),
                   isObSecure: true,
+                  suffixTap: (){
+
+                  },
                   suffixIcon: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: CommonImageView(
@@ -126,7 +135,15 @@ class SignUp extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    CustomCheckBox(isActive: true, onTap: () {}),
+                    Obx(
+                      ()=> CustomCheckBox(
+                        isActive: signupController.isChecked.value,
+                        onTap: () {
+                          signupController.isChecked.value =
+                              !signupController.isChecked.value;
+                        },
+                      ),
+                    ),
                     const SizedBox(
                       width: 6,
                     ),
@@ -143,10 +160,18 @@ class SignUp extends StatelessWidget {
                 MyButton(
                     onTap: () async {
                       if (signupController.validateForm()) {
-                        String? result = await signupController.signup(); // Wait for result
+                        String? result =
+                            await signupController.signup(); // Wait for result
                         if (result == null) {
                           signupController.clearFields();
-                          Get.to(() => Onboarding(), binding: OnboardingBinding());
+                          // SharedPreferences prefs = await SharedPreferences.getInstance();
+                          // bool hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;
+                          // if (!hasSeenOnboarding) {
+                          Get.to(() => Onboarding(),
+                              binding: OnboardingBinding());
+                          // } else {
+                          //   Get.to(() => Login(), binding: LoginBinding());
+                          // }
                         }
                       }
                     },
@@ -184,16 +209,18 @@ class SignUp extends StatelessWidget {
                     CustomButton(
                       buttonText: "",
                       onTap: () async {
-                        if(Platform.isAndroid || Platform.isIOS){
-                          bool isSuccess = await signupController.signInWithGoogle();
-                          if(isSuccess){
-                            Get.to(() => OTP());
+                        if (Platform.isAndroid || Platform.isIOS) {
+                          bool isSuccess =
+                              await signupController.signInWithGoogle();
+                          if (isSuccess) {
+                            Get.offAll(() => OTP());
                           }
                         }
                       },
                       customChild: Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: SvgPicture.asset("assets/images/google_logo.svg"),
+                        child:
+                            SvgPicture.asset("assets/images/google_logo.svg"),
                       ),
                       width: 101,
                       bgColor: kSecondaryColor,

@@ -40,6 +40,18 @@ class Onboarding extends StatelessWidget {
           weight: FontWeight.w500,
         )),
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Obx(() {
+          final isLastPage =
+              onboardingController.currentPageIndex.value ==
+                  pagesList.length - 1;
+          return MyButton(
+            onTap: () => onboardingController.nextPage(pagesList),
+            buttonText: isLastPage ? "Finish" : "Next",
+          );
+        }),
+      ),
       body: Column(
         children: [
           const SizedBox(height: 18),
@@ -55,18 +67,6 @@ class Onboarding extends StatelessWidget {
               },
               itemBuilder: (_, i) => pagesList[i],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Obx(() {
-              final isLastPage =
-                  onboardingController.currentPageIndex.value ==
-                      pagesList.length - 1;
-              return MyButton(
-                onTap: () => onboardingController.nextPage(pagesList),
-                buttonText: isLastPage ? "Finish" : "Next",
-              );
-            }),
           ),
         ],
       ),

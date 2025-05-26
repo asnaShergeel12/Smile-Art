@@ -16,8 +16,8 @@ class AlignerNumber extends StatelessWidget {
           MyText(text: "About your aligners",size:16,weight:FontWeight.w500,color:kPrimaryColor,),
 
           MyText(text: "What is your current aligner number?",size:24,weight:FontWeight.w600,color:kTextColor,),
-          SizedBox(height:8,),
-          MyTextField(hint: "", label: '',bordercolor:kPrimaryColor,textColor:kPrimaryColor,)
+          const SizedBox(height:8,),
+          MyTextField(bordercolor:kPrimaryColor,textColor:kPrimaryColor,keyboardType: TextInputType.number,)
         ],),
     );
   }

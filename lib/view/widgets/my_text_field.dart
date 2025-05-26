@@ -7,8 +7,9 @@ import 'my_text_widget.dart';
 class MyTextField extends StatefulWidget {
   MyTextField({
     super.key,
+    this.readOnly = false,
     this.controller,
-    required this.label,
+    this.label,
     this.hint,
     this.onChanged,
     this.isObSecure = false,
@@ -37,9 +38,11 @@ class MyTextField extends StatefulWidget {
     this.focusedLabelColor,
     this.useCountryCodePicker = false,
     this.useOutlinedBorder = true,
+    this.textCapitalization = TextCapitalization.none
   });
 
-  final String label;
+  final bool readOnly;
+  final String? label;
   String? hint, suffixtext;
   TextEditingController? controller;
   ValueChanged<String>? onChanged;
@@ -66,6 +69,7 @@ class MyTextField extends StatefulWidget {
       labelColor;
   FontWeight? labelWeight;
   TextInputType? keyboardType;
+  TextCapitalization textCapitalization;
   VoidCallback? suffixTap;
   String? Function(String?)? validator;
 
@@ -115,8 +119,11 @@ class _MyTextFieldState extends State<MyTextField> {
               valueListenable: _focusNotifier,
               builder: (_, isFocused, child) {
                 return TextFormField(
-                  cursorColor: kSecondaryColor,
+                  readOnly: widget.readOnly,
+                  cursorColor: kPrimaryColor,
+                  showCursor: true,
                   keyboardType: widget.keyboardType,
+                  textCapitalization: widget.textCapitalization,
                   maxLines: widget.maxLines ?? 1,
                   controller: widget.controller,
                   onChanged: widget.onChanged,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smile_art/binding/login_binding.dart';
+import 'package:smile_art/view/screens/auth/login.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingController extends GetxController {
   final currentPageIndex = 0.obs;
@@ -33,9 +35,9 @@ class OnboardingController extends GetxController {
   }
 
   Future<void> completeOnboarding() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('hasSeenOnboarding', true);
-    Get.offAllNamed('/signup'); // Navigate to signup after onboarding
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // await prefs.setBool('hasSeenOnboarding', true);
+    Get.offAll(()=>Login(), binding: LoginBinding()); // Navigate to signup after onboarding
   }
 
   String get appBarText {

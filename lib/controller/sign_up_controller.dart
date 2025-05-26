@@ -10,7 +10,7 @@ class SignUpController extends GetxController {
   final emailController = TextEditingController();
   final createPasswordController = TextEditingController();
   final repeatPasswordController = TextEditingController();
-  RxBool isCheck = false.obs;
+  RxBool isChecked = false.obs;
   final AuthService _authService = AuthService();
 
 

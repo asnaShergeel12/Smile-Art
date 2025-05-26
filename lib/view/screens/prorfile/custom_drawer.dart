@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:smile_art/binding/edit_profile_binding.dart';
+import 'package:smile_art/constant/app_constants.dart';
 import 'package:smile_art/view/screens/downloads/downloads.dart';
 import 'package:smile_art/view/screens/home/notifications.dart';
 import 'package:smile_art/view/screens/prorfile/help_center.dart';
@@ -44,7 +46,7 @@ class CustomDrawer extends StatelessWidget {
                             children: [
                               Container(
                                 height: 140,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     image: DecorationImage(
                                         image: AssetImage(Assets.imagesProfileBg))),
                                 child: Padding(
@@ -52,60 +54,60 @@ class CustomDrawer extends StatelessWidget {
                                   child: CommonImageView(imagePath: Assets.imagesProfile),
                                 ),
                               ),
-                              MyText(text: "Smuel Smith", size: 18, weight: FontWeight.w600,color:kSecondaryColor,),
-                              MyText(text: "smuel123@gmail.com", size: 12, weight: FontWeight.w500,color:kSecondaryColor,),
+                              Obx(()=> MyText(text: ('${userModelGlobal.value.firstName} ${userModelGlobal.value.lastName}'), size: 18, weight: FontWeight.w600,color:kSecondaryColor,)),
+                              Obx(()=> MyText(text: userModelGlobal.value.email, size: 12, weight: FontWeight.w500,color:kSecondaryColor,)),
                             ],
                           ),
                         ],
                       ),
                     ],
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildDrawerItem('Edit Profile', Assets.profileEditProfile,
                           () {
-                        Get.to(() => EditeProfile());
+                        Get.to(() => EditeProfile(), binding: EditProfileBinding());
                       }),
 
                       _buildDrawerItem('Change password', Assets.profileChangePa,
                           () {
-                         Get.to(() => ChangePassword());
+                         Get.to(() => const ChangePassword());
                       }),
                       _buildDrawerItem('Notification settings', Assets.profileNotif,
                               () {
-                            Get.to(() => NotificationSetting());
+                            Get.to(() => const NotificationSetting());
                           }),
                       _buildDrawerItem('Privacy & policy',
                           Assets.profileBill, () {
-                        Get.to(() => PrivacyPolicy());
+                        Get.to(() => const PrivacyPolicy());
                       }),
                       _buildDrawerItem(
                           'Terms & conditions', Assets.profilePrivacy, () {
-                        Get.to(() => TermsConditions());
+                        Get.to(() => const TermsConditions());
                       }),
                       _buildDrawerItem(
                           'Help & support', Assets.profilePrivacy,
                           () {
-                         Get.to(() => HelpCenter());
+                         Get.to(() => const HelpCenter());
                       }),
                       _buildDrawerItem(
                           'View downloads', Assets.profileDownlaods,
                               () {
-                            Get.to(() => Downloads());
+                            Get.to(() => const Downloads());
                           }),
                       _buildDrawerItem(
                           'Your simulation', Assets.profileSimulations,
                               () {
-                            Get.to(() => Simulations());
+                            Get.to(() => const Simulations());
                           }),
-                      SizedBox(height:5,),
+                      const SizedBox(height:5,),
                       Bounce(
                         onPressed: (){
                     showLogOutDialog(context: context);
                         },
-                        duration: Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 200),
                         child: Container(
                           height:49,
                           width:Get.width/1.8,
@@ -130,7 +132,7 @@ class CustomDrawer extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              SizedBox(width:10,),
+                              const SizedBox(width:10,),
                               MyText(
                                 paddingLeft: 15,
                                 text: "Logout",
@@ -144,7 +146,7 @@ class CustomDrawer extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height:48,)
+                  const SizedBox(height:48,)
                 ],
               ),
             ),
@@ -163,7 +165,7 @@ class CustomDrawer extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Bounce(
         onPressed: ontap,
-        duration: Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 200),
         child: Container(
           height:49,
           width:Get.width/1.8,
@@ -188,7 +190,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width:10,),
+              const SizedBox(width:10,),
               MyText(
                 paddingLeft: 15,
                 text: title,

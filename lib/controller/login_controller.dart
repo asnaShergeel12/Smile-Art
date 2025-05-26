@@ -8,7 +8,7 @@ class LoginController extends GetxController {
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  RxBool isCheck = false.obs;
+  RxBool isChecked = false.obs;
   final AuthService _authService = AuthService();
 
   @override

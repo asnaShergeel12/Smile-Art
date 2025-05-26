@@ -19,16 +19,12 @@ void main() async {
     DeviceOrientation.portraitUp
   ]);
 
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  bool hasSeenOnboarding = sharedPreferences.getBool('hasSeenOnboarding')?? false;
-
-  runApp(MyApp(hasSeenOnboarding: hasSeenOnboarding));
+  runApp(MyApp());
 
 }
 
 class MyApp extends StatelessWidget {
-  final bool hasSeenOnboarding;
-  const MyApp({super.key, required this.hasSeenOnboarding});
+  const MyApp({super.key,});
 
 
   @override
@@ -40,8 +36,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         scaffoldBackgroundColor:kSecondaryColor
       ),
-      home:hasSeenOnboarding?
-        const SplashScreen():const SplashScreen(),
+      home:const SplashScreen(),
     );
   }
 }

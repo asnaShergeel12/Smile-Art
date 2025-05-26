@@ -30,8 +30,7 @@ class ResetPassword extends StatelessWidget {
                 print("New Password: $newPassword");
                 resetPassController.clearFields();
                 if (isUpdated) {
-                  // Navigate to login after successful update
-                  Get.to(() => Login(), binding: LoginBinding());
+                  Get.offAll(() => Login(), binding: LoginBinding());
                 }
               }
             },

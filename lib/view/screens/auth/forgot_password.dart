@@ -80,7 +80,7 @@ class ForgotPassword extends StatelessWidget {
                                 subtitle:
                                     "Password reset link has been sent on your email address.",
                                 onTap: () {
-                                  Get.to(()=>Login(), binding: LoginBinding());
+                                  Get.offAll(()=>Login(), binding: LoginBinding());
                                 });
                           }
                         },
@@ -100,7 +100,7 @@ class ForgotPassword extends StatelessWidget {
                           text: "Login",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Get.to(()=>Login(), binding: LoginBinding());
+                              Get.offAll(()=>Login(), binding: LoginBinding());
                             },
                           style: const TextStyle(
                             fontSize: 14,

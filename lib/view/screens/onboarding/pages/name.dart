@@ -16,8 +16,8 @@ class NamePage extends StatelessWidget {
         MyText(text: "About you",size:16,weight:FontWeight.w500,color:kPrimaryColor,),
 
         MyText(text: "What is your full name?",size:24,weight:FontWeight.w600,color:kTextColor,),
-          SizedBox(height:8,),
-        MyTextField(hint: "", label: '',bordercolor:kPrimaryColor,textColor:kPrimaryColor,)
+          const SizedBox(height:8,),
+        MyTextField(bordercolor:kPrimaryColor,textColor:kPrimaryColor,)
       ],),
     );
   }

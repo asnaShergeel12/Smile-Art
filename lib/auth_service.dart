@@ -1,14 +1,19 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:smile_art/binding/login_binding.dart';
 import 'package:smile_art/binding/reset_password_binding.dart';
+import 'package:smile_art/constant/app_constants.dart';
 import 'package:smile_art/view/screens/auth/login.dart';
 import 'package:smile_art/view/screens/auth/reset_password.dart';
 import 'package:smile_art/view/widgets/custom_snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'model/profile_model.dart';
 
 class AuthService {
   static final AuthService _authService = AuthService._internal();
@@ -19,7 +24,6 @@ class AuthService {
 
   final supabase = Supabase.instance.client;
 
-  //signup
   Future<String?> signup(String email, String password, String fullname) async {
     try {
       final response =
@@ -28,9 +32,18 @@ class AuthService {
       final user = response.user;
 
       if (user == null) throw 'User signup failed';
+
+      final nameParts = fullname.trim().split(RegExp(r"\s+"));
+      final firstName = nameParts.isNotEmpty ? nameParts.first : '';
+      final lastName =
+          nameParts.isNotEmpty ? nameParts.sublist(1).join('') : '';
+      // const deviceToke = '';
+
       await supabase.from('profile').insert({
         'id': user.id,
-        'fullname': fullname,
+        'first_name': firstName,
+        'last_name': lastName,
+        'email': email,
       });
 
       return null;
@@ -41,13 +54,13 @@ class AuthService {
     }
   }
 
-  //login
   Future<String?> login(String email, String password) async {
     try {
       final response = await supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
+      getUserProfile();
       if (response.user != null) {
         return null;
       }
@@ -59,12 +72,11 @@ class AuthService {
     }
   }
 
-  //logout
   Future<void> logout(BuildContext context) async {
     try {
       await supabase.auth.signOut();
       if (!context.mounted) return;
-      Get.offAll(() => Login());
+      Get.offAll(() => Login(), binding: LoginBinding());
     } catch (e) {
       print("Logout error: $e");
     }
@@ -157,7 +169,8 @@ class AuthService {
 
   Future<void> resetPasswordViaEmailLink(String email) async {
     try {
-      await supabase.auth.resetPasswordForEmail(email, redirectTo: 'smileart://reset-password');
+      await supabase.auth.resetPasswordForEmail(email,
+          redirectTo: 'smileart://reset-password');
     } catch (e) {
       CustomSnackbar.error(
         title: "Error",
@@ -179,12 +192,47 @@ class AuthService {
   Future<bool> updateNewPassword(String newPassword) async {
     try {
       await supabase.auth.updateUser(UserAttributes(password: newPassword));
-      CustomSnackbar.success(title: "Success", message: "Password has been updated successfully!");
+      CustomSnackbar.success(
+          title: "Success", message: "Password has been updated successfully!");
       return true;
     } catch (e) {
       // log("THis was the exception while changing the password: $e");
-      CustomSnackbar.error(title: "Error", message: "Something went wrong.\n $e");
+      CustomSnackbar.error(
+          title: "Error", message: "Something went wrong.\n $e");
       rethrow;
+    }
+  }
+
+  getUserProfile() async {
+    try {
+      final user = supabase.auth.currentUser;
+      if (user == null) return null;
+
+      supabase
+          .from('profile')
+          .stream(primaryKey: ['id'])
+          .eq('id', user.id)
+          .listen((value) {
+            log('This is user model $value');
+            userModelGlobal.value = ProfileModel.fromJson(value.first);
+          });
+    } catch (e) {
+      throw "Error fetching user profile: $e";
+    }
+    return null;
+  }
+
+  Future<void> updateProfileField({required Map<String, dynamic> fields}) async{
+    try {
+      final user = supabase.auth.currentUser;
+      if (user == null) throw "User not logged in";
+
+      await supabase.from('profile').update(fields).eq('id', user.id);
+      // refresh the user model globally
+      await getUserProfile();
+
+    } catch (e) {
+      throw "Failed to update profile.\n$e" ;
     }
   }
 }

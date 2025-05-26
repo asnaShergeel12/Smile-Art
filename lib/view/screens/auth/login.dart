@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:smile_art/binding/forgot_password_binding.dart';
+import 'package:smile_art/binding/sign_up_binding.dart';
 import 'package:smile_art/constant/app_style.dart';
 import 'package:smile_art/controller/login_controller.dart';
 import 'package:smile_art/utils/app_validators.dart';
@@ -45,7 +46,7 @@ class Login extends StatelessWidget {
                   text: "Signup",
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      Get.to(SignUp());
+                      Get.to(() => SignUp(), binding: SignUpBinding());
                     },
                   style: const TextStyle(
                     fontSize: 14,
@@ -110,7 +111,8 @@ class Login extends StatelessWidget {
                       color: kRedColor,
                       onTap: () {
                         loginController.clearFields();
-                        Get.to(()=>ForgotPassword(), binding: ForgotPasswordBinding());
+                        Get.to(() => ForgotPassword(),
+                            binding: ForgotPasswordBinding());
                       },
                     ),
                   ],
@@ -120,7 +122,15 @@ class Login extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    CustomCheckBox(isActive: true, onTap: () {}),
+                    Obx(
+                      () => CustomCheckBox(
+                        isActive: loginController.isChecked.value,
+                        onTap: () {
+                          loginController.isChecked.value =
+                              !loginController.isChecked.value;
+                        },
+                      ),
+                    ),
                     const SizedBox(
                       width: 6,
                     ),
@@ -140,7 +150,7 @@ class Login extends StatelessWidget {
                         bool isSuccess = await loginController.login();
                         if (isSuccess) {
                           loginController.clearFields();
-                          Get.to(const CustomBottomNavBar());
+                          Get.offAll(const CustomBottomNavBar());
                         }
                       }
                     },
@@ -176,10 +186,11 @@ class Login extends StatelessWidget {
                     CustomButton(
                       buttonText: "",
                       onTap: () async {
-                          bool isSuccess = await loginController.logInWithGoogle();
-                          if(isSuccess){
-                            Get.to(() => const CustomBottomNavBar());
-                          }
+                        bool isSuccess =
+                            await loginController.logInWithGoogle();
+                        if (isSuccess) {
+                          Get.to(() => const CustomBottomNavBar());
+                        }
                       },
                       customChild: Padding(
                         padding: const EdgeInsets.all(12.0),
