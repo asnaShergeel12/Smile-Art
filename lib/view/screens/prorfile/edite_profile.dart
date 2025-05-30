@@ -43,7 +43,7 @@ class EditeProfile extends StatelessWidget {
                 const SizedBox(height:28,),
                 MyTextField(label: 'Full Name', controller: editProfileController.fullNameController, textCapitalization: TextCapitalization.words,),
                 const SizedBox(height:8,),
-                MyTextField(label: 'Email Address', controller: editProfileController.emailController, readOnly: true,),
+                MyTextField(label: 'Email Address', controller: editProfileController.emailController, readOnly: true, showCursor: false,),
 
               ],),
             ),

@@ -18,33 +18,33 @@ class SignUpController extends GetxController {
     return signupFormKey.currentState?.validate() ?? false;
   }
 
-  Future<String?> signup() async {
-    String email = emailController.text.trim();
-    String password = createPasswordController.text.trim();
-    String fullname = nameController.text.trim();
-
-    try {
-      final result = await _authService.signup(email, password, fullname);
-
-      if (result == null) {
-        CustomSnackbar.success(
-          title: "Success",
-          message: "Account created successfully!",
-        );
-      } else {
-        CustomSnackbar.error(
-            title: "Signup Failed",
-            message: result,
-        );
-      }
-    } catch (e) {
-      CustomSnackbar.error(
-          title: "Error",
-          message: "Something went wrong. Please try again later.",
-      );
-    }
-    return null;
-  }
+  // Future<String?> signup() async {
+  //   String email = emailController.text.trim();
+  //   String password = createPasswordController.text.trim();
+  //   String fullname = nameController.text.trim();
+  //
+  //   try {
+  //     final result = await _authService.signup(email, password, fullname);
+  //
+  //     if (result == null) {
+  //       CustomSnackbar.success(
+  //         title: "Success",
+  //         message: "Account created successfully!",
+  //       );
+  //     } else {
+  //       CustomSnackbar.error(
+  //           title: "Signup Failed",
+  //           message: result,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     CustomSnackbar.error(
+  //         title: "Error",
+  //         message: "Something went wrong. Please try again later.",
+  //     );
+  //   }
+  //   return null;
+  // }
 
   Future<bool> signInWithGoogle() async {
     try {

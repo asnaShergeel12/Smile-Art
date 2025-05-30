@@ -3,13 +3,15 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:smile_art/view/screens/auth/login.dart';
 import 'package:smile_art/view/screens/start/start.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../constant/app_colors.dart';
 import '../../../generated/assets.dart';
 import '../../widgets/common_image_widget.dart';
+import '../bottom_bar/bottom_navbar.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -77,13 +79,29 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Start the animation and navigate after completion
     if (!_isDisposed) {
-      _animationController!.forward().then((_) {
-        if (!_isDisposed) {
-          Get.offAll(
-                () =>  Start(),
-            transition: Transition.fadeIn,
-            duration: const Duration(seconds: 2),
-          );
+      _animationController!.forward().then((_) async {
+        if (_isDisposed) return;
+
+        final supabase = Supabase.instance.client;
+        final session = supabase.auth.currentSession;
+
+        if (session != null && session.user != null) {
+          try {
+            await supabase.auth.refreshSession();
+            final user = await supabase.auth.getUser();
+            if (user.user != null) {
+              Get.offAll(() => const CustomBottomNavBar());
+            } else {
+              Get.offAll(() => const Start());
+            }
+          } catch (e) {
+            // Handle errors like network issues or invalid session
+            debugPrint("Session error: $e");
+            await supabase.auth.signOut();
+            Get.offAll(() => const Start());
+          }
+        } else {
+          Get.offAll(() => const Start());
         }
       });
     }

@@ -62,7 +62,7 @@ class Start extends StatelessWidget {
                   children: [
                     MyButton(
                       onTap: () {
-                        Get.to(()=>Login(), binding: LoginBinding());
+                        Get.offAll(()=>Login(), binding: LoginBinding());
                       },
                       buttonText: "Login",
                       backgroundColor: kSecondaryColor,
@@ -71,7 +71,8 @@ class Start extends StatelessWidget {
                     const SizedBox(height:18,),
                     MyButton(
                       onTap: () {
-                        Get.to(()=> SignUp(),binding: SignUpBinding());
+
+                        Get.offAll(()=> SignUp(),binding: SignUpBinding());
                       },
                       buttonText: "Sign Up",
                       fontColor: kSecondaryColor,

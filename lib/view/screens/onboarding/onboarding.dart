@@ -15,12 +15,8 @@ class Onboarding extends StatelessWidget {
   Onboarding({super.key});
   final onboardingController = Get.find<OnboardingController>();
 
-  final List<Widget> pagesList = const [
-    NamePage(),
-    Aligners(),
-    AlignerNumber(),
-    ChangeAligner(),
-    CurrentAligner(),
+  final List<Widget> pagesList = [
+    NamePage(), Aligners(), AlignerNumber(), CurrentAligner(), ChangeAligner(),
   ];
 
   @override

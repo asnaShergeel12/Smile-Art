@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smile_art/view/widgets/custom_snackbar.dart';
 import '../auth_service.dart';
 
@@ -69,6 +70,16 @@ class LoginController extends GetxController {
   clearFields(){
     emailController.clear();
     passwordController.clear();
+  }
+
+  Future<bool> hasSeenOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('onboardingSeen') ?? false;
+  }
+
+  Future<void> markOnboardingSeen() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboardingSeen', true);
   }
 
   @override

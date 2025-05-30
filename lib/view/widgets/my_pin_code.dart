@@ -8,12 +8,13 @@ class MyPinCode extends StatefulWidget {
   final Function(String) onChanged;
   final Function(String) onCompleted;
   final Color? color;
+  final TextEditingController controller;
 
   const MyPinCode({
     super.key,
     required this.onChanged,
     required this.onCompleted,
-    this.color,
+    this.color, required this.controller,
   });
 
   @override
@@ -27,7 +28,7 @@ class _MyPinCodeState extends State<MyPinCode> {
 
       width: 48,
       height: 56,
-      margin: EdgeInsets.all(3),
+      margin: const EdgeInsets.all(3),
       textStyle: TextStyle(
           fontSize: 18,
           color: widget.color ??kTextColor ,
@@ -49,6 +50,7 @@ class _MyPinCodeState extends State<MyPinCode> {
     );
 
     return Pinput(
+      controller: widget.controller,
       length: 6,
       defaultPinTheme: defaultPinTheme,
       focusedPinTheme: focusedPinTheme,
@@ -60,7 +62,7 @@ class _MyPinCodeState extends State<MyPinCode> {
         ),
       ),
       errorPinTheme:  defaultPinTheme.copyWith(
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           fontSize: 18,
           color: kRedColor,
           fontWeight: FontWeight.w400,
@@ -73,9 +75,6 @@ class _MyPinCodeState extends State<MyPinCode> {
           border: Border.all(color: kRedColor, width: 1),
         ),
       ),
-      validator: (s) {
-        return s == '2222' ? null : 'Invalid Code';
-      },
       onChanged: widget.onChanged,
       onCompleted: widget.onCompleted,
     );

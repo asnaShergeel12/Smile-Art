@@ -1,11 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smile_art/binding/login_binding.dart';
 import '../../../constant/app_colors.dart';
-import '../../../generated/assets.dart';
+import '../../../controller/otp_controller.dart';
 import '../../widgets/auth_appbar.dart';
-import '../../widgets/custom_dialog.dart';
 import '../../widgets/my_button.dart';
 import '../../widgets/my_pin_code.dart';
 import '../../widgets/my_text_widget.dart';
@@ -14,17 +11,17 @@ import 'login.dart';
 
 class OTP extends StatelessWidget {
   OTP({super.key});
-
-  bool isCheck = false;
+  final otpController = Get.find<OtpController>();
 
   @override
   Widget build(BuildContext context) {
+    // final String email;
     return Scaffold(
       appBar: authAppBar("Account Verification"),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
-          mainAxisAlignment:MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,53 +38,55 @@ class OTP extends StatelessWidget {
                   height: 10,
                 ),
                 MyText(
-                  text:
-                  "Enter OTP sent to your email to verify your account.",
+                  text: "Enter OTP sent to your email to verify your account.",
                   color: kGreyColor,
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                MyPinCode(onChanged: (String ) {
-
-                }, onCompleted: (String ) {  },),
-
-
+                MyPinCode(
+                  controller: otpController.pinController,
+                  onChanged: (value) => otpController.enteredOtp.value = value,
+                  onCompleted: (pin) {},
+                ),
               ],
             ),
             Column(
-              mainAxisSize:MainAxisSize.min,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Texts(children: const [
-                  TextSpan(
-                      text: "00:30 ",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: kGreyColor,
-                         )),
-                  TextSpan(
-                      text: "Resend",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: kPrimaryColor,
+                Obx(
+                  () => GestureDetector(
+                    child: Texts(children: [
+                      TextSpan(
+                          text: otpController.resendCooldown.value > 0
+                              ? '00:${otpController.resendCooldown.value.toString().padLeft(2, '0')}'
+                              : '00:00 ',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: kGreyColor,
                           )),
-                ]),
-                const SizedBox(height:16,),
-                MyButton(onTap: () {
-                 showCustomDialog(context: context, onTap: (){
-                   Get.to(()=>Login(), binding: LoginBinding());
-                 },
-                   title:"Verification Complete!",
-                   subtitle:"Your account has been successfully verified.",
-                   image:Assets.imagesVerified,
-                   confirmText:"Continue"
-
-                 );
-                }, buttonText: "Confirm"),
-                const SizedBox(height:16,)
-
+                      TextSpan(
+                          text: otpController.resendCooldown.value > 0
+                              ? ''
+                              : " Resend",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: kPrimaryColor,
+                          )),
+                    ]),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                MyButton(
+                    onTap: () => otpController.verifyOtp(),
+                    buttonText: "Confirm"),
+                const SizedBox(
+                  height: 16,
+                )
               ],
             ),
           ],

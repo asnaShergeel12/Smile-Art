@@ -38,10 +38,11 @@ class MyTextField extends StatefulWidget {
     this.focusedLabelColor,
     this.useCountryCodePicker = false,
     this.useOutlinedBorder = true,
-    this.textCapitalization = TextCapitalization.none
+    this.textCapitalization = TextCapitalization.none, this.showCursor = true,
   });
 
   final bool readOnly;
+  final bool showCursor;
   final String? label;
   String? hint, suffixtext;
   TextEditingController? controller;
@@ -103,8 +104,8 @@ class _MyTextFieldState extends State<MyTextField> {
   @override
   Widget build(BuildContext context) {
     return Animate(
-      effects: [
-        const MoveEffect(
+      effects: const [
+        MoveEffect(
           curve: Curves.ease,
           duration: Duration(milliseconds: 500),
           transformHitTests: false,
@@ -121,7 +122,7 @@ class _MyTextFieldState extends State<MyTextField> {
                 return TextFormField(
                   readOnly: widget.readOnly,
                   cursorColor: kPrimaryColor,
-                  showCursor: true,
+                  showCursor: widget.showCursor,
                   keyboardType: widget.keyboardType,
                   textCapitalization: widget.textCapitalization,
                   maxLines: widget.maxLines ?? 1,

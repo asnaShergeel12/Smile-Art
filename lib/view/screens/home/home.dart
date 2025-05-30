@@ -28,7 +28,7 @@ class Home extends StatelessWidget {
       childDecoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       // Your custom drawer widget
       child: Scaffold(
         appBar: AppBar(
@@ -46,7 +46,7 @@ class Home extends StatelessWidget {
                   imagePath: Assets.imagesProfile,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 6,
               ),
               Column(
@@ -76,7 +76,7 @@ class Home extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Get.to(Notifications());
+                      Get.to(const Notifications());
                     },
                     child: Container(
                       height: 44,
@@ -99,7 +99,7 @@ class Home extends StatelessWidget {
                     child: Container(
                       height: 8,
                       width: 8,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           shape: BoxShape.circle, color: kRedColor),
                     ),
                   )
@@ -111,10 +111,10 @@ class Home extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0),
           child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 18,
                 ),
                 Container(
@@ -123,7 +123,7 @@ class Home extends StatelessWidget {
                   clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      image: DecorationImage(
+                      image: const DecorationImage(
                           image: AssetImage(Assets.imagesHomeFrame),
                           fit: BoxFit.cover)),
                   child: Padding(
@@ -138,7 +138,7 @@ class Home extends StatelessWidget {
                           weight: FontWeight.w700,
                           color: kSecondaryColor,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         MyText(
@@ -148,14 +148,14 @@ class Home extends StatelessWidget {
                           weight: FontWeight.w500,
                           color: kSecondaryColor,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         MyButton(
                           onTap: () {
                             Get.bottomSheet(
                                 backgroundColor: kSecondaryColor,
-                                CameraBottomSheet());
+                                const CameraBottomSheet());
                           },
                           buttonText: "Try Now",
                           fontSize: 10,
@@ -168,7 +168,7 @@ class Home extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 13,
                 ),
                 Container(
@@ -185,7 +185,7 @@ class Home extends StatelessWidget {
                             Container(
                               height: 33,
                               width: 33,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   shape: BoxShape.circle, color: kPrimaryColor),
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
@@ -194,7 +194,7 @@ class Home extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 8,
                             ),
                             Column(
@@ -216,7 +216,7 @@ class Home extends StatelessWidget {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 18,
                         ),
                         Container(
@@ -233,7 +233,7 @@ class Home extends StatelessWidget {
                               linearGradient: LinearGradient(
                                   colors: [
                                     Colors.white.withOpacity(0.9),
-                                    Color(0xff0099B9),
+                                    const Color(0xff0099B9),
                                     kPrimaryColor
                                   ],
                                   begin: Alignment.centerLeft,
@@ -241,7 +241,7 @@ class Home extends StatelessWidget {
                               animation: true,
                               animationDuration: 1000,
                               lineHeight: 18.0,
-                              barRadius: Radius.circular(30),
+                              barRadius: const Radius.circular(30),
                               percent: 0.6,
                               center: MyText(
                                 text: "5 days",
@@ -256,11 +256,11 @@ class Home extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 38,
                 ),
-                HoursOutGauge(),
-                SizedBox(
+                const HoursOutGauge(),
+                const SizedBox(
                   height: 18,
                 ),
                 Container(
@@ -277,7 +277,7 @@ class Home extends StatelessWidget {
                             Container(
                               height: 33,
                               width: 33,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   shape: BoxShape.circle, color: kPrimaryColor),
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
@@ -286,7 +286,7 @@ class Home extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 8,
                             ),
                             Column(
@@ -308,7 +308,7 @@ class Home extends StatelessWidget {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 18,
                         ),
                         Container(
@@ -325,7 +325,7 @@ class Home extends StatelessWidget {
                               linearGradient: LinearGradient(
                                   colors: [
                                     Colors.white.withOpacity(0.9),
-                                    Color(0xff0099B9),
+                                    const Color(0xff0099B9),
                                     kPrimaryColor
                                   ],
                                   begin: Alignment.centerLeft,
@@ -333,7 +333,7 @@ class Home extends StatelessWidget {
                               animation: true,
                               animationDuration: 1000,
                               lineHeight: 18.0,
-                              barRadius: Radius.circular(30),
+                              barRadius: const Radius.circular(30),
                               percent: 0.3,
                               center: MyText(
                                 text: "20 days",
@@ -348,7 +348,7 @@ class Home extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 48,
                 )
               ],

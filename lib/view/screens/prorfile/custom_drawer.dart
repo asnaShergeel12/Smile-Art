@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:smile_art/binding/change_password_binding.dart';
 import 'package:smile_art/binding/edit_profile_binding.dart';
 import 'package:smile_art/constant/app_constants.dart';
 import 'package:smile_art/view/screens/downloads/downloads.dart';
@@ -73,7 +74,7 @@ class CustomDrawer extends StatelessWidget {
 
                       _buildDrawerItem('Change password', Assets.profileChangePa,
                           () {
-                         Get.to(() => const ChangePassword());
+                         Get.to(() => ChangePassword(), binding: ChangePasswordBinding());
                       }),
                       _buildDrawerItem('Notification settings', Assets.profileNotif,
                               () {

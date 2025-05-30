@@ -9,6 +9,7 @@ import 'package:smile_art/binding/login_binding.dart';
 import 'package:smile_art/binding/onboarding_binding.dart';
 import 'package:smile_art/constant/app_style.dart';
 import 'package:smile_art/controller/sign_up_controller.dart';
+import '../../../binding/otp_binding.dart';
 import '../../../constant/app_colors.dart';
 import '../../../generated/assets.dart';
 import '../../../utils/app_validators.dart';
@@ -139,8 +140,7 @@ class SignUp extends StatelessWidget {
                       ()=> CustomCheckBox(
                         isActive: signupController.isChecked.value,
                         onTap: () {
-                          signupController.isChecked.value =
-                              !signupController.isChecked.value;
+                          signupController.isChecked.toggle();
                         },
                       ),
                     ),
@@ -159,20 +159,22 @@ class SignUp extends StatelessWidget {
                 ),
                 MyButton(
                     onTap: () async {
+
                       if (signupController.validateForm()) {
-                        String? result =
-                            await signupController.signup(); // Wait for result
-                        if (result == null) {
+                        // String? result =
+                        //     await signupController.signup(); // Wait for result
+                        // if (result == null) {
+                          String email = signupController.emailController.text.trim();
+                          String fullname = signupController.nameController.text.trim();
+                          String password = signupController.createPasswordController.text.trim();
+                          if (email.isNotEmpty && password.isNotEmpty && fullname.isNotEmpty) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                            Get.to(() => OTP(), arguments: {'email': email, 'fullname': fullname, 'password': password}, binding: OtpBinding());
+                            });
+                          }
                           signupController.clearFields();
-                          // SharedPreferences prefs = await SharedPreferences.getInstance();
-                          // bool hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;
-                          // if (!hasSeenOnboarding) {
-                          Get.to(() => Onboarding(),
-                              binding: OnboardingBinding());
-                          // } else {
-                          //   Get.to(() => Login(), binding: LoginBinding());
-                          // }
-                        }
+                        // }
                       }
                     },
                     buttonText: "Signup"),
@@ -213,7 +215,10 @@ class SignUp extends StatelessWidget {
                           bool isSuccess =
                               await signupController.signInWithGoogle();
                           if (isSuccess) {
-                            Get.offAll(() => OTP());
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                            Get.offAll(() => Onboarding(), binding: OnboardingBinding());
+                            });
                           }
                         }
                       },

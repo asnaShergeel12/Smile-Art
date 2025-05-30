@@ -1,10 +1,13 @@
 import 'dart:async';
-import 'dart:developer';
+import 'package:intl/intl.dart';
+import 'dart:convert';
+import 'dart:math';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 import 'package:smile_art/binding/login_binding.dart';
 import 'package:smile_art/binding/reset_password_binding.dart';
 import 'package:smile_art/constant/app_constants.dart';
@@ -13,15 +16,13 @@ import 'package:smile_art/view/screens/auth/reset_password.dart';
 import 'package:smile_art/view/widgets/custom_snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'model/otp_model.dart';
 import 'model/profile_model.dart';
 
 class AuthService {
   static final AuthService _authService = AuthService._internal();
-
   factory AuthService() => _authService;
-
   AuthService._internal();
-
   final supabase = Supabase.instance.client;
 
   Future<String?> signup(String email, String password, String fullname) async {
@@ -39,18 +40,132 @@ class AuthService {
           nameParts.isNotEmpty ? nameParts.sublist(1).join('') : '';
       // const deviceToke = '';
 
-      await supabase.from('profile').insert({
-        'id': user.id,
-        'first_name': firstName,
-        'last_name': lastName,
-        'email': email,
-      });
+      ProfileModel userModel = ProfileModel(
+          id: user.id,
+          firstName: firstName,
+          lastName: lastName,
+          email: email);
+      print('Attempting to insert user data: ${userModel.toJson()}');
+
+      final insertUserData = await supabase.from('profile').insert(userModel.toJson()).select();
+      print('User Data inserted successfully: $insertUserData');
+
+
+      // await supabase.from('profile').insert({
+      //   'id': user.id,
+      //   'first_name': firstName,
+      //   'last_name': lastName,
+      //   'email': email,
+      // });
 
       return null;
     } on AuthException catch (e) {
       return e.message;
     } catch (e) {
       return ("Error: $e");
+    }
+  }
+
+  int generateOtp() {
+    final random = Random();
+    return 100000 + random.nextInt(90000);
+  }
+
+  Future<String?> sendEmail(String email) async {
+    try {
+      var otp = generateOtp();
+      DateTime createdAt = DateTime.now().toUtc();
+      DateTime expiresAt = createdAt.add(const Duration(minutes: 1));
+
+      // Create the OTP model
+      OtpModel userOtp = OtpModel(
+        email: email,
+        otp: otp,
+        createdAt: createdAt,
+        expiringAt: expiresAt,
+        isUsed: false,
+      );
+
+      print('Attempting to insert OTP: ${userOtp.toJson()}');
+
+      // Insert new OTP record
+      final insertResponse = await supabase
+          .from('otp')
+          .insert(userOtp.toJson())
+          .select();
+
+      print('OTP inserted successfully: $insertResponse');
+
+      var serviceId = 'service_an5pgtn', templateId = 'template_krtrikb', userId = '8VlsjVOFc9poev_xv';
+
+      final emailResponse = await http.post(
+        Uri.parse('https://api.emailjs.com/api/v1.0/email/send'),
+        headers: {
+          'origin': 'http://localhost',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'service_id': serviceId,
+          'user_id': userId,
+          'template_id': templateId,
+          'template_params': {
+            'passcode': otp.toString(),
+            'sender_email': email,
+            'time': DateFormat('yyyy-MM-dd HH:mm:ss').format(expiresAt.toLocal()),
+          },
+        }),
+      );
+
+      print('Email API Response Status: ${emailResponse.statusCode}');
+      print('Email API Response Body: ${emailResponse.body}');
+
+      if (emailResponse.statusCode == 200) {
+        return otp.toString();
+      } else {
+        throw Exception('Email sending failed: ${emailResponse.statusCode} - ${emailResponse.body}');
+      }
+
+    } catch (e) {
+      print('Error while sending email: $e');
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>?> verifyOtpFromDatabase(String email, String enteredOtp) async {
+    try {
+      final now = DateTime.now().toUtc();
+
+      final response = await supabase
+          .from('otp')
+          .select()
+          .eq('email', email)
+          .eq('is_used', false)
+          .gt('expiring_at', now.toIso8601String())
+          .order('created_at', ascending: false)
+          .limit(1)
+          .maybeSingle();
+
+      if (response != null && response['otp'].toString() == enteredOtp.toString()) {
+        return response;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error verifying OTP: $e');
+      return null;
+    }
+  }
+
+  Future<void> markOtpAsUsed(String id) async {
+    try {
+      await supabase
+          .from('otp')
+          .update({'is_used': true})
+          .eq('id', id);
+
+      print('OTP marked as used for ID: $id');
+    } catch (e) {
+      print('Error in markOtpAsUsed: $e');
     }
   }
 
@@ -189,7 +304,7 @@ class AuthService {
     });
   }
 
-  Future<bool> updateNewPassword(String newPassword) async {
+  Future<bool> updateNewForgottenPassword(String newPassword) async {
     try {
       await supabase.auth.updateUser(UserAttributes(password: newPassword));
       CustomSnackbar.success(
@@ -213,7 +328,7 @@ class AuthService {
           .stream(primaryKey: ['id'])
           .eq('id', user.id)
           .listen((value) {
-            log('This is user model $value');
+            // log('This is user model $value');
             userModelGlobal.value = ProfileModel.fromJson(value.first);
           });
     } catch (e) {
@@ -235,4 +350,22 @@ class AuthService {
       throw "Failed to update profile.\n$e" ;
     }
   }
+
+  Future<String?> changePassword(String password) async {
+    try{
+      final response = await supabase.auth.updateUser(UserAttributes(password: password));
+      if (response.user == null) {
+        throw "Something went wrong" ;
+      }
+
+      return "Password updated successfully";
+    } on AuthException catch(e){
+      throw AuthException("Auth Error: ${e.message}");
+    }
+    catch(err){
+      throw Exception("Unexpected Error: $err");
+
+    }
+  }
+
 }

@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smile_art/aligner_info_service.dart';
 import 'package:smile_art/binding/login_binding.dart';
 import 'package:smile_art/view/screens/auth/login.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smile_art/view/screens/bottom_bar/bottom_navbar.dart';
+import '../constant/app_constants.dart';
+import '../view/widgets/custom_snackbar.dart';
 
 class OnboardingController extends GetxController {
   final currentPageIndex = 0.obs;
   late PageController pageController;
+  final nameController = TextEditingController();
+  final totalAlignerNumberController = TextEditingController();
+  final currentAlignerNumberController = TextEditingController();
+  final alignerWearDaysController = TextEditingController();
+  final reminderController = TextEditingController();
+  DateTime? selectedReminderTime;
+  final user = userModelGlobal.value;
+  AlignerInfoService alignerInfoService = AlignerInfoService();
 
   @override
   void onInit() {
     pageController = PageController();
+    nameController.text =
+        '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim() ?? '';
     super.onInit();
   }
 
@@ -37,7 +50,10 @@ class OnboardingController extends GetxController {
   Future<void> completeOnboarding() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // await prefs.setBool('hasSeenOnboarding', true);
-    Get.offAll(()=>Login(), binding: LoginBinding()); // Navigate to signup after onboarding
+    await storeAlignerInfoToDatabase();
+    Get.offAll(() => CustomBottomNavBar(),
+        // binding: LoginBinding()
+    );
   }
 
   String get appBarText {
@@ -53,6 +69,34 @@ class OnboardingController extends GetxController {
       default:
         return "Onboarding";
     }
+  }
+
+  Future<String?> storeAlignerInfoToDatabase() async {
+    try {
+      final result = await alignerInfoService.alignerInfo(
+          totalAlignerNumberController.text,
+          currentAlignerNumberController.text,
+          alignerWearDaysController.text,
+          selectedReminderTime!);
+
+      if (result == null) {
+        CustomSnackbar.success(
+          title: "Success",
+          message: "Aligner Information added successfully!",
+        );
+      } else {
+        CustomSnackbar.error(
+          title: "Failed to store aligners information",
+          message: result,
+        );
+      }
+    } catch (e) {
+      CustomSnackbar.error(
+        title: "Error",
+        message: "Something went wrong. Please try again later.",
+      );
+    }
+    return null;
   }
 
   @override

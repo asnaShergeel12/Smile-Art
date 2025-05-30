@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smile_art/constant/app_colors.dart';
 import 'package:smile_art/view/widgets/my_text_field.dart';
 import 'package:smile_art/view/widgets/my_text_widget.dart';
+import '../../../../controller/onboarding_controller.dart';
 
 class CurrentAligner extends StatelessWidget {
-  const CurrentAligner({super.key});
+  final onboardingController = Get.find<OnboardingController>();
+  CurrentAligner({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,9 @@ class CurrentAligner extends StatelessWidget {
 
           MyText(text: "How many days have you been wearing your current aligner?",size:24,weight:FontWeight.w600,color:kTextColor,),
           const SizedBox(height:8,),
-          MyTextField(bordercolor:kPrimaryColor,textColor:kPrimaryColor, keyboardType: TextInputType.number,)
+          MyTextField(
+            controller: onboardingController.alignerWearDaysController,
+            bordercolor:kPrimaryColor,textColor:kPrimaryColor, keyboardType: TextInputType.number,)
         ],),
     );
   }

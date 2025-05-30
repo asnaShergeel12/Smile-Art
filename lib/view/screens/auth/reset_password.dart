@@ -26,7 +26,7 @@ class ResetPassword extends StatelessWidget {
             onTap: () async {
               if (resetPassController.validateForm()) {
                 String newPassword = resetPassController.newPasswordController.text.trim();
-                bool isUpdated = await AuthService().updateNewPassword(newPassword);
+                bool isUpdated = await AuthService().updateNewForgottenPassword(newPassword);
                 print("New Password: $newPassword");
                 resetPassController.clearFields();
                 if (isUpdated) {

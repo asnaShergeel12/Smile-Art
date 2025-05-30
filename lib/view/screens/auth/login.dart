@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:smile_art/binding/forgot_password_binding.dart';
+import 'package:smile_art/binding/onboarding_binding.dart';
 import 'package:smile_art/binding/sign_up_binding.dart';
 import 'package:smile_art/constant/app_style.dart';
 import 'package:smile_art/controller/login_controller.dart';
@@ -17,6 +18,7 @@ import '../../widgets/my_text_field.dart';
 import '../../widgets/my_text_widget.dart';
 import '../../widgets/rich_texts.dart';
 import '../bottom_bar/bottom_navbar.dart';
+import '../onboarding/onboarding.dart';
 import 'forgot_password.dart';
 import 'sign_up.dart';
 
@@ -126,8 +128,7 @@ class Login extends StatelessWidget {
                       () => CustomCheckBox(
                         isActive: loginController.isChecked.value,
                         onTap: () {
-                          loginController.isChecked.value =
-                              !loginController.isChecked.value;
+                          loginController.isChecked.toggle();
                         },
                       ),
                     ),
@@ -150,7 +151,18 @@ class Login extends StatelessWidget {
                         bool isSuccess = await loginController.login();
                         if (isSuccess) {
                           loginController.clearFields();
-                          Get.offAll(const CustomBottomNavBar());
+                          // Get.offAll(const CustomBottomNavBar());
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          final seenOnboarding =
+                              await loginController.hasSeenOnboarding();
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            if (seenOnboarding) {
+                              Get.offAll(() => const CustomBottomNavBar());
+                            } else {
+                              Get.offAll(() =>
+                                  Onboarding(), binding: OnboardingBinding()); // Make sure this screen exists
+                            }
+                          });
                         }
                       }
                     },
@@ -189,7 +201,19 @@ class Login extends StatelessWidget {
                         bool isSuccess =
                             await loginController.logInWithGoogle();
                         if (isSuccess) {
-                          Get.to(() => const CustomBottomNavBar());
+                          // Get.to(() => const CustomBottomNavBar());
+                          FocusManager.instance.primaryFocus?.unfocus();
+
+                          final seenOnboarding =
+                              await loginController.hasSeenOnboarding();
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            if (seenOnboarding) {
+                              Get.offAll(() => const CustomBottomNavBar());
+                            } else {
+                              Get.offAll(() =>
+                                  Onboarding(), binding: OnboardingBinding()); // Make sure this screen exists
+                            }
+                          });
                         }
                       },
                       customChild: Padding(
