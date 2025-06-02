@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smile_art/aligner_info_service.dart';
+import 'package:smile_art/auth_service.dart';
 import 'package:smile_art/binding/login_binding.dart';
 import 'package:smile_art/view/screens/auth/login.dart';
 import 'package:smile_art/view/screens/bottom_bar/bottom_navbar.dart';
@@ -18,6 +19,7 @@ class OnboardingController extends GetxController {
   DateTime? selectedReminderTime;
   final user = userModelGlobal.value;
   AlignerInfoService alignerInfoService = AlignerInfoService();
+  AuthService authService = AuthService();
 
   @override
   void onInit() {
@@ -48,8 +50,6 @@ class OnboardingController extends GetxController {
   }
 
   Future<void> completeOnboarding() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // await prefs.setBool('hasSeenOnboarding', true);
     await storeAlignerInfoToDatabase();
     Get.offAll(() => CustomBottomNavBar(),
         // binding: LoginBinding()
@@ -71,23 +71,24 @@ class OnboardingController extends GetxController {
     }
   }
 
-  Future<String?> storeAlignerInfoToDatabase() async {
+  Future<void> storeAlignerInfoToDatabase() async {
     try {
       final result = await alignerInfoService.alignerInfo(
-          totalAlignerNumberController.text,
-          currentAlignerNumberController.text,
-          alignerWearDaysController.text,
-          selectedReminderTime!);
+        totalAlignerNumberController.text,
+        currentAlignerNumberController.text,
+        alignerWearDaysController.text,
+        selectedReminderTime!,
+      );
 
-      if (result == null) {
+      if (result == "Success") {
         CustomSnackbar.success(
-          title: "Success",
+          title: "Aligner info added",
           message: "Aligner Information added successfully!",
         );
       } else {
         CustomSnackbar.error(
           title: "Failed to store aligners information",
-          message: result,
+          message: result ?? "Unknown error occurred",
         );
       }
     } catch (e) {
@@ -96,8 +97,8 @@ class OnboardingController extends GetxController {
         message: "Something went wrong. Please try again later.",
       );
     }
-    return null;
   }
+
 
   @override
   void onClose() {

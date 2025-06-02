@@ -151,18 +151,7 @@ class Login extends StatelessWidget {
                         bool isSuccess = await loginController.login();
                         if (isSuccess) {
                           loginController.clearFields();
-                          // Get.offAll(const CustomBottomNavBar());
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          final seenOnboarding =
-                              await loginController.hasSeenOnboarding();
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            if (seenOnboarding) {
-                              Get.offAll(() => const CustomBottomNavBar());
-                            } else {
-                              Get.offAll(() =>
-                                  Onboarding(), binding: OnboardingBinding()); // Make sure this screen exists
-                            }
-                          });
+                          Get.offAll(const CustomBottomNavBar());
                         }
                       }
                     },
@@ -201,19 +190,7 @@ class Login extends StatelessWidget {
                         bool isSuccess =
                             await loginController.logInWithGoogle();
                         if (isSuccess) {
-                          // Get.to(() => const CustomBottomNavBar());
-                          FocusManager.instance.primaryFocus?.unfocus();
-
-                          final seenOnboarding =
-                              await loginController.hasSeenOnboarding();
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            if (seenOnboarding) {
-                              Get.offAll(() => const CustomBottomNavBar());
-                            } else {
-                              Get.offAll(() =>
-                                  Onboarding(), binding: OnboardingBinding()); // Make sure this screen exists
-                            }
-                          });
+                          Get.to(() => const CustomBottomNavBar());
                         }
                       },
                       customChild: Padding(

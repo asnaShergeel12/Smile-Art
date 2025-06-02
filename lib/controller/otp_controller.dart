@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smile_art/view/widgets/custom_snackbar.dart';
 import '../auth_service.dart';
 import '../binding/login_binding.dart';
+import '../binding/onboarding_binding.dart';
 import '../generated/assets.dart';
 import '../view/screens/auth/login.dart';
+import '../view/screens/bottom_bar/bottom_navbar.dart';
+import '../view/screens/onboarding/onboarding.dart';
 import '../view/widgets/custom_dialog.dart';
 
 
@@ -67,16 +71,24 @@ class OtpController extends GetxController {
     try {
       isVerifying.value = true;
 
-      // Use the database verification method instead of local comparison
+      // Database verification method instead of local comparison
       final otpData = await authService.verifyOtpFromDatabase(email, enteredOtp.value);
 
       if (otpData != null) {
-        await authService.markOtpAsUsed(otpData ['id']);
         await signup();
+        await authService.markOtpAsUsed(otpData ['id']);
         showCustomDialog(
             context: Get.context!,
             onTap: () async {
-              Get.offAll(() => Login(), binding: LoginBinding());
+              // Get.offAll(() => Login(), binding: LoginBinding());
+              final seenOnboarding =
+              await hasSeenOnboarding();
+              if (seenOnboarding) {
+                Get.offAll(() => const CustomBottomNavBar());
+              } else {
+                Get.offAll(() =>
+                    Onboarding(), binding: OnboardingBinding());
+              }
             },
             title: "Verification Complete!",
             subtitle:
@@ -145,6 +157,16 @@ class OtpController extends GetxController {
       );
     }
     return null;
+  }
+
+  Future<bool> hasSeenOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('onboardingSeen') ?? false;
+  }
+
+  Future<void> markOnboardingSeen() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboardingSeen', true);
   }
 
   @override

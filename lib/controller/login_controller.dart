@@ -57,6 +57,7 @@ class LoginController extends GetxController {
         title: "Success",
         message: "Signed in with Google successfully!",
       );
+      _authService.getUserProfile();
       return true;
     } catch (e) {
       CustomSnackbar.error(
@@ -70,23 +71,6 @@ class LoginController extends GetxController {
   clearFields(){
     emailController.clear();
     passwordController.clear();
-  }
-
-  Future<bool> hasSeenOnboarding() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('onboardingSeen') ?? false;
-  }
-
-  Future<void> markOnboardingSeen() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('onboardingSeen', true);
-  }
-
-  @override
-  void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.onClose();
   }
 
 }

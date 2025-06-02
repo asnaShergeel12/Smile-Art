@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
+import 'package:smile_art/auth_service.dart';
 import 'package:smile_art/view/screens/auth/login.dart';
 import 'package:smile_art/view/screens/start/start.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -26,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen>
   Animation<double>? _progressAnimation;
   bool _showWhiteLogo = false;
   bool _isDisposed = false;
+  AuthService authService = AuthService();
 
   @override
   void initState() {
@@ -85,17 +87,13 @@ class _SplashScreenState extends State<SplashScreen>
         final supabase = Supabase.instance.client;
         final session = supabase.auth.currentSession;
 
-        if (session != null && session.user != null) {
+        if (session != null) {
           try {
-            await supabase.auth.refreshSession();
-            final user = await supabase.auth.getUser();
-            if (user.user != null) {
+            // await supabase.auth.refreshSession();
+            authService.getUserProfile();
               Get.offAll(() => const CustomBottomNavBar());
-            } else {
-              Get.offAll(() => const Start());
-            }
+
           } catch (e) {
-            // Handle errors like network issues or invalid session
             debugPrint("Session error: $e");
             await supabase.auth.signOut();
             Get.offAll(() => const Start());
