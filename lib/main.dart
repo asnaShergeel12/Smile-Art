@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smile_art/constant/app_colors.dart';
+import 'auth_service.dart';
 import 'view/screens/launch/splash_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -18,6 +19,8 @@ void main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp
   ]);
+
+  AuthService().getUserProfile();
 
   runApp(MyApp());
 

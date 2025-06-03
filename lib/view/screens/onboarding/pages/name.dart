@@ -21,8 +21,8 @@ class NamePage extends StatelessWidget {
         MyText(text: "What is your full name?",size:24,weight:FontWeight.w600,color:kTextColor,),
           const SizedBox(height:8,),
         MyTextField(
-          controller: onboardingController.nameController,
-          bordercolor:kPrimaryColor,textColor:kPrimaryColor, readOnly: true, showCursor: false,)
+            controller: onboardingController.nameController,
+            bordercolor:kPrimaryColor,textColor:kPrimaryColor, readOnly: true, showCursor: false,),
       ],),
     );
   }

@@ -1,5 +1,4 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import 'model/aligner_info_model.dart';
 
 class AlignerInfoService {
@@ -25,12 +24,17 @@ class AlignerInfoService {
         throw Exception("Invalid input: failed to parse one or more values.");
       }
 
+      final user = supabase.auth.currentUser;
+      if (user == null) throw Exception("User not logged in");
+
       final model = AlignerInfoModel(
+        userId: user.id,
         totalAlignerNumber: total,
         currentAlignerNumber: current,
         alignerWearDays: wearDays,
         reminder: reminder,
       );
+
 
       final response = await supabase.from('aligner_info').insert(model.toJson()).select();
       print('Aligners Info successfully uploaded to database: $response');

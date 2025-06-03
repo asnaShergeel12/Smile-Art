@@ -24,6 +24,7 @@ class AuthService {
   factory AuthService() => _authService;
   AuthService._internal();
   final supabase = Supabase.instance.client;
+  User? get currentUser => supabase.auth.currentUser;
 
   Future<String?> signup(String email, String password, String fullname) async {
     try {
@@ -48,6 +49,10 @@ class AuthService {
       print('Attempting to insert user data: ${userModel.toJson()}');
 
       final insertUserData = await supabase.from('profile').insert(userModel.toJson()).select();
+
+      if(insertUserData!= null){
+        userModelGlobal.value = ProfileModel.fromJson(insertUserData.first);
+      }
       print('User Data inserted successfully: $insertUserData');
 
 
@@ -186,6 +191,17 @@ class AuthService {
       return ("Error: $e");
     }
   }
+
+  Future<bool> hasCompletedOnboarding(String userId) async {
+    final response = await supabase
+        .from('aligner_info')
+        .select('id')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+    return response != null;
+  }
+
 
   Future<void> logout(BuildContext context) async {
     try {

@@ -80,15 +80,23 @@ class OtpController extends GetxController {
         showCustomDialog(
             context: Get.context!,
             onTap: () async {
-              // Get.offAll(() => Login(), binding: LoginBinding());
-              final seenOnboarding =
-              await hasSeenOnboarding();
-              if (seenOnboarding) {
-                Get.offAll(() => const CustomBottomNavBar());
-              } else {
-                Get.offAll(() =>
-                    Onboarding(), binding: OnboardingBinding());
+              authService.getUserProfile();
+              final userId = authService.currentUser?.id;
+
+              if (userId == null) {
+                throw Exception("User not logged in after signup");
               }
+
+              final alreadyOnboarded = await authService.hasCompletedOnboarding(userId);
+
+              if(alreadyOnboarded){
+                Get.offAll(()=> CustomBottomNavBar());
+              } else{
+
+                Get.to(() =>
+                  Onboarding(), binding: OnboardingBinding());
+              }
+
             },
             title: "Verification Complete!",
             subtitle:
@@ -159,15 +167,7 @@ class OtpController extends GetxController {
     return null;
   }
 
-  Future<bool> hasSeenOnboarding() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('onboardingSeen') ?? false;
-  }
 
-  Future<void> markOnboardingSeen() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('onboardingSeen', true);
-  }
 
   @override
   void onClose() {

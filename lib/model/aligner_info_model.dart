@@ -1,6 +1,6 @@
 class AlignerInfoModel {
   String? id;
-  String? userId;
+  String userId;
   int totalAlignerNumber;
   int currentAlignerNumber;
   int alignerWearDays;
@@ -8,7 +8,7 @@ class AlignerInfoModel {
 
   AlignerInfoModel({
     this.id,
-    this.userId,
+    required this.userId,
     required this.totalAlignerNumber,
     required this.currentAlignerNumber,
     required this.alignerWearDays,
@@ -17,6 +17,7 @@ class AlignerInfoModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'user_id': userId,
       'total_aligner_number': totalAlignerNumber,
       'current_aligner_number': currentAlignerNumber,
       'aligner_wear_days': alignerWearDays,

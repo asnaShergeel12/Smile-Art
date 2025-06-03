@@ -18,8 +18,7 @@ class Aligners extends StatelessWidget {
         crossAxisAlignment:CrossAxisAlignment.start,
         children: [
           MyText(text: "About your aligners",size:16,weight:FontWeight.w500,color:kPrimaryColor,),
-
-          MyText(text: "${onboardingController.user.firstName} how many aligners do you have?",size:24,weight:FontWeight.w600,color:kTextColor,),
+        MyText(text: "${onboardingController.user.firstName ?? ''} how many aligners do you have?",size:24,weight:FontWeight.w600,color:kTextColor,),
           const SizedBox(height:8,),
           MyTextField(
             controller: onboardingController.totalAlignerNumberController,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smile_art/aligner_info_service.dart';
 import 'package:smile_art/auth_service.dart';
 import 'package:smile_art/binding/login_binding.dart';
@@ -23,10 +24,10 @@ class OnboardingController extends GetxController {
 
   @override
   void onInit() {
+    super.onInit();
     pageController = PageController();
     nameController.text =
         '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim() ?? '';
-    super.onInit();
   }
 
   void nextPage(List pagesList) {
@@ -51,6 +52,11 @@ class OnboardingController extends GetxController {
 
   Future<void> completeOnboarding() async {
     await storeAlignerInfoToDatabase();
+    await authService.getUserProfile();
+    // Store onboardingSeen = true
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboardingSeen', true);
+
     Get.offAll(() => CustomBottomNavBar(),
         // binding: LoginBinding()
     );
