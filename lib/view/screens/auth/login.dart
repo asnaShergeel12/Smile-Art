@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:smile_art/binding/bottom_nav_binding.dart';
 import 'package:smile_art/binding/forgot_password_binding.dart';
 import 'package:smile_art/binding/onboarding_binding.dart';
 import 'package:smile_art/binding/sign_up_binding.dart';
@@ -151,7 +152,7 @@ class Login extends StatelessWidget {
                         bool isSuccess = await loginController.login();
                         if (isSuccess) {
                           loginController.clearFields();
-                          Get.offAll(const CustomBottomNavBar());
+                          Get.offAll(CustomBottomNavBar(), binding: BottomNavBinding());
                         }
                       }
                     },
@@ -190,7 +191,7 @@ class Login extends StatelessWidget {
                         bool isSuccess =
                             await loginController.logInWithGoogle();
                         if (isSuccess) {
-                          Get.to(() => const CustomBottomNavBar());
+                          Get.to(() => CustomBottomNavBar(), binding: BottomNavBinding());
                         }
                       },
                       customChild: Padding(

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smile_art/auth_service.dart';
+import 'package:smile_art/binding/bottom_nav_binding.dart';
 import 'package:smile_art/binding/onboarding_binding.dart';
 import 'package:smile_art/view/screens/auth/login.dart';
 import 'package:smile_art/view/screens/onboarding/onboarding.dart';
@@ -97,7 +98,7 @@ class _SplashScreenState extends State<SplashScreen>
             final onboardingSeen = prefs.getBool('onboardingSeen') ?? false;
             if (onboardingSeen) {
               // authService.getUserProfile();
-              Get.offAll(() => const CustomBottomNavBar());
+              Get.offAll(() => CustomBottomNavBar(), binding: BottomNavBinding());
             } else {
               Get.offAll(()=> Onboarding(), binding: OnboardingBinding());
             }

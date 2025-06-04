@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../constant/app_colors.dart';
 
-
 class CommonImageView extends StatelessWidget {
 // ignore_for_file: must_be_immutable
   String? url;

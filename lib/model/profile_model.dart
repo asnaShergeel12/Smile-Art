@@ -15,7 +15,7 @@ class ProfileModel {
     required this.firstName,
     required this.lastName,
     required this.email,
-    this.profilePicture = '',
+    this.profilePicture = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
     this.deviceToken = '',
     this.isActive = true,
     this.isOnline = true,

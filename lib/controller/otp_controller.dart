@@ -1,17 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smile_art/view/widgets/custom_snackbar.dart';
 import '../auth_service.dart';
-import '../binding/login_binding.dart';
+import '../binding/bottom_nav_binding.dart';
 import '../binding/onboarding_binding.dart';
 import '../generated/assets.dart';
-import '../view/screens/auth/login.dart';
 import '../view/screens/bottom_bar/bottom_navbar.dart';
 import '../view/screens/onboarding/onboarding.dart';
 import '../view/widgets/custom_dialog.dart';
-
 
 class OtpController extends GetxController {
   final String email;
@@ -90,7 +87,7 @@ class OtpController extends GetxController {
               final alreadyOnboarded = await authService.hasCompletedOnboarding(userId);
 
               if(alreadyOnboarded){
-                Get.offAll(()=> CustomBottomNavBar());
+                Get.offAll(()=> CustomBottomNavBar(), binding: BottomNavBinding());
               } else{
 
                 Get.to(() =>

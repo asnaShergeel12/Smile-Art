@@ -1,13 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:smile_art/constant/app_constants.dart';
 import 'package:smile_art/controller/edit_profile_controller.dart';
 import 'package:smile_art/view/widgets/my_text_widget.dart';
-
-import '../../../auth_service.dart';
-import '../../widgets/log_out_dialogue.dart';
 import '../../widgets/my_button.dart';
 import '../../widgets/my_text_field.dart';
 import '../../widgets/profile_appbar.dart';
@@ -34,7 +28,7 @@ class EditeProfile extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const ProfilePic(),
+                    ProfilePic(),
                     const SizedBox(height:8,),
                     MyText(text: editProfileController.user.firstName,),
                     MyText(text: editProfileController.user.email,),
@@ -49,20 +43,14 @@ class EditeProfile extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom:18.0),
-              child: MyButton(onTap: ()async {
-                showLogOutDialog( context:context);
-                final fullName = editProfileController.fullNameController.text.trim();
-                final nameParts = fullName.split(' ');
-                final updatedFirstName = nameParts.isNotEmpty ? nameParts.first : '';
-                final updatedLastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
-
-                await AuthService().updateProfileField(fields: {
-                  'first_name': updatedFirstName,
-                  'last_name': updatedLastName,
-                });
-              }, buttonText: "Update"),
+              child: MyButton(
+                onTap: () async {
+                  await editProfileController.updateUserProfile();
+                },
+                buttonText: "Update",
+              ),
             ),
-          ],
+              ],
         ),
       ),
     );

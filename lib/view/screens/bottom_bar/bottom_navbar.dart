@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smile_art/constant/app_colors.dart';
+import 'package:smile_art/controller/bottom_nav_controller.dart';
 import 'package:smile_art/view/screens/home/educational_hub.dart';
 import 'package:smile_art/view/screens/home/home.dart';
 import 'package:smile_art/view/screens/media/media.dart';
@@ -10,66 +11,51 @@ import 'package:smile_art/view/widgets/common_image_widget.dart';
 import '../../../generated/assets.dart';
 import '../home/calender.dart';
 
-class CustomBottomNavBar extends StatefulWidget {
-  const CustomBottomNavBar({super.key});
-
-  @override
-  State<CustomBottomNavBar> createState() => _CustomBottomNavBarState();
-}
-
-class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
-  int currentIndex = 0;
+class CustomBottomNavBar extends StatelessWidget {
+  final bottomNavBarController = Get.find<BottomNavController>();
 
   final List<Widget> screens = [
     Home(),
     Calendar(),
     Media(),
-    EducationalHub(), // Placeholder for Profile tab
+    EducationalHub(),
   ];
 
 
-  void onTabSelected(int index) {
-    setState(() {
-      currentIndex = index;
-
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: screens[currentIndex],
-        floatingActionButton: FloatingActionButton(
-          elevation: 0,
-          shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(100),
-            borderSide: BorderSide.none,
+    return Obx(
+      ()=> Scaffold(
+          body: screens[bottomNavBarController.currentIndex.value],
+          floatingActionButton: FloatingActionButton(
+            elevation: 0,
+            shape: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(100),
+              borderSide: BorderSide.none,
+            ),
+            onPressed: () async {
+              final ImagePicker picker = ImagePicker();
+              final XFile? photo =
+              await picker.pickImage(source: ImageSource.camera);
+
+              if (photo != null) {
+                // Do something with the captured photo, e.g., display or upload
+                print('Captured image path: ${photo.path}');
+              }
+                bottomNavBarController.currentIndex.value = 0;
+            },
+            backgroundColor: kPrimaryColor,
+            child: CommonImageView(
+              svgPath: Assets.bottomTablerCamera,
+            ),
           ),
-          onPressed: () async {
-            final ImagePicker picker = ImagePicker();
-            final XFile? photo =
-            await picker.pickImage(source: ImageSource.camera);
-
-            if (photo != null) {
-              // Do something with the captured photo, e.g., display or upload
-              print('Captured image path: ${photo.path}');
-            }
-
-            setState(() {
-              currentIndex = 0;
-            });
-          },
-          backgroundColor: kPrimaryColor,
-          child: CommonImageView(
-            svgPath: Assets.bottomTablerCamera,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: CustomBottomAppBar(
+            currentIndex: bottomNavBarController.currentIndex.value,
+            onTabSelected: (index) => bottomNavBarController.changeTab(index),
           ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: CustomBottomAppBar(
-          currentIndex: currentIndex,
-          onTabSelected: onTabSelected,
-        ),
 
+      ),
     );
   }
 }

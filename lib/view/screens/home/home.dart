@@ -155,7 +155,7 @@ class Home extends StatelessWidget {
                           onTap: () {
                             Get.bottomSheet(
                                 backgroundColor: kSecondaryColor,
-                                const CameraBottomSheet());
+                                CameraBottomSheet());
                           },
                           buttonText: "Try Now",
                           fontSize: 10,
