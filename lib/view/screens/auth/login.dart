@@ -191,7 +191,7 @@ class Login extends StatelessWidget {
                         bool isSuccess =
                             await loginController.logInWithGoogle();
                         if (isSuccess) {
-                          Get.to(() => CustomBottomNavBar(), binding: BottomNavBinding());
+                          Get.offAll(() => CustomBottomNavBar(), binding: BottomNavBinding());
                         }
                       },
                       customChild: Padding(

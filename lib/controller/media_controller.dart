@@ -1,11 +1,11 @@
 import 'dart:io';
+import 'package:fc_native_video_thumbnail/fc_native_video_thumbnail.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:smile_art/model/aligner_progress_model.dart';
 import 'package:smile_art/view/widgets/custom_snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 import '../app_enums.dart';
 
 class MediaController extends GetxController {
@@ -81,14 +81,7 @@ class MediaController extends GetxController {
     String? thumbnailUrl;
     if (mediaType == MediaType.video) {
     // Generate thumbnail for video
-    final thumbnailPath = await VideoThumbnail.thumbnailFile(
-    video: file.path,
-    thumbnailPath: (await getTemporaryDirectory()).path,
-    imageFormat: ImageFormat.JPEG,
-    maxWidth: 400, // specify the width of the thumbnail
-    quality: 215,
-    );
-
+    final thumbnailPath = await generateThumbnail(file.path);
     if (thumbnailPath != null) {
     // Upload thumbnail to Supabase Storage
     final thumbnailFile = File(thumbnailPath);
@@ -116,12 +109,37 @@ class MediaController extends GetxController {
           .insert(media.toJson()).select();
       print("Aligner progress media uploaded successfully. $insertResponse");
 
-      await fetchMediaByProgressType(progressType);
+      await fetchMediaByProgressType(indexToProgressType[selectedIndex.value]!);
     } catch (e) {
       print('Upload Error: $e');
       CustomSnackbar.error(title: 'Upload Error', message: e.toString());
     } finally {
       isUploading.value = false;
+    }
+  }
+
+  // generate thumbnail for video
+  Future<String?> generateThumbnail(String videoPath) async {
+    final plugin = FcNativeVideoThumbnail();
+    final tempDir = await getTemporaryDirectory();
+    final thumbnailPath = '${tempDir.path}/thumb.jpg';
+
+    try {
+      final success = await plugin.getVideoThumbnail(
+        srcFile: videoPath,
+        destFile: thumbnailPath,
+        width: 215,
+        height: 400,
+        format: 'jpeg',
+        quality: 90,
+      );
+      print('Thumbnail path: $success');
+
+      return success ? thumbnailPath : null;
+    } catch (err) {
+      CustomSnackbar.error(title: 'Error', message: 'Failed to generate thumbnail $err');
+      print("Thumbnail generation failed: $err");
+      return null;
     }
   }
 
@@ -195,6 +213,7 @@ class MediaController extends GetxController {
             .eq('id', media.id!); // ensure id is not null
       }
 
+      await reorderAlignerNumbers(media.progressType);
       await fetchMediaByProgressType(media.progressType);
     } catch (e) {
       print('Delete Error: $e');
@@ -273,6 +292,7 @@ class MediaController extends GetxController {
           .update(updates)
           .eq('id', media.id!);
 
+      await reorderAlignerNumbers(media.progressType);
       await fetchMediaByProgressType(progressType ?? media.progressType);
     } catch (e) {
       print('Edit Error: $e');
@@ -280,4 +300,29 @@ class MediaController extends GetxController {
     }
   }
 
+  Future<void> reorderAlignerNumbers(ProgressType progressType) async {
+    try {
+      final userId = supabaseClient.auth.currentUser?.id;
+      if (userId == null) return;
+
+      final response = await supabaseClient
+          .from('aligner_progress')
+          .select()
+          .eq('user_id', userId)
+          .eq('progress_type', progressType.name)
+          // .order('aligner_number', ascending: true)
+          .order('created_at', ascending: true); //order by upload time
+
+      if (response != null && response is List) {
+        for (int i = 0; i < response.length; i++) {
+          final id = response[i]['id'];
+          await supabaseClient.from('aligner_progress').update({
+            'aligner_number': i + 1,
+          }).eq('id', id);
+        }
+      }
+    } catch (e) {
+      print('Reorder Error: $e');
+    }
+  }
 }

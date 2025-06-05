@@ -139,14 +139,28 @@ class Media extends StatelessWidget {
         onTap: () {
           Get.to(const VideoPlaying());
         },
-        child: Container(
-          height: 400,
-          width: 215,
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
+        child: Stack(
+          children: [
+            Container(
+            height: 400,
+            width: 215,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: _buildMediaItemDetails(item, item.thumbnailUrl ?? ''),
           ),
-          child: _buildMediaItemDetails(item, item.thumbnailUrl ?? ''),
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 77),
+                child: CircleAvatar(
+                  backgroundColor: kPrimaryColor,
+                  radius: 30,
+                  child: Icon(Icons.play_arrow, color: kSecondaryColor, size: 30),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -165,7 +179,7 @@ class Media extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
         ),
-        child: _buildMediaItemDetails(item, item.mediaUrl ?? ''),
+        child: _buildMediaItemDetails(item, imageUrl ?? ''),
       ),
     );
   }
@@ -173,34 +187,29 @@ class Media extends StatelessWidget {
   Widget _buildDummyVideoItem() {
     return Padding(
       padding: const EdgeInsets.only(left: 18.0, right: 10),
-      child: GestureDetector(
-        onTap: () {
-          Get.to(const VideoPlaying());
-        },
-        child: Stack(
-          children: [
-            Container(
-              height: 400,
-              width: 215,
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                image: const DecorationImage(image: AssetImage(Assets.imagesVideoSelfie)),
-              ),
-              child: _buildDummyMediaItemDetails(),
+      child: Stack(
+        children: [
+          Container(
+            height: 400,
+            width: 215,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              image: const DecorationImage(image: AssetImage(Assets.imagesVideoSelfie)),
             ),
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 77),
-                child: CircleAvatar(
-                  backgroundColor: kPrimaryColor,
-                  radius: 30,
-                  child: Icon(Icons.play_arrow, color: kSecondaryColor, size: 30),
-                ),
+            child: _buildDummyMediaItemDetails(),
+          ),
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 77),
+              child: CircleAvatar(
+                backgroundColor: kPrimaryColor,
+                radius: 30,
+                child: Icon(Icons.play_arrow, color: kSecondaryColor, size: 30),
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -231,8 +240,8 @@ class Media extends StatelessWidget {
             bottomRight: Radius.circular(14),
           ),
           child: CachedNetworkImage(
-            imageUrl: imageUrl ?? '',
-            placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+            imageUrl: imageUrl,
+            placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: kPrimaryColor,)),
             errorWidget: (context, url, error) => const Icon(Icons.broken_image_outlined, color: kPrimaryColor, size: 30),
             fit: BoxFit.fill,
             height: 400,
@@ -243,7 +252,7 @@ class Media extends StatelessWidget {
         Align(
           alignment: Alignment.bottomCenter,
           child: Column(
-            mainAxisSize: MainAxisSize.min, // Use min to fit the content
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MyText(

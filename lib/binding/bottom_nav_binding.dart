@@ -5,7 +5,7 @@ import 'package:smile_art/controller/media_controller.dart';
 class BottomNavBinding extends Bindings{
   @override
   void dependencies() {
-    Get.lazyPut(()=>BottomNavController());
-    Get.lazyPut(()=>MediaController());
+    Get.lazyPut<BottomNavController>(()=>BottomNavController());
+    Get.lazyPut<MediaController>(()=>MediaController());
   }
 }

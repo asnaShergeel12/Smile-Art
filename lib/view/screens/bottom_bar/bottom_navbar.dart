@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smile_art/constant/app_colors.dart';
 import 'package:smile_art/controller/bottom_nav_controller.dart';
+import 'package:smile_art/controller/media_controller.dart';
 import 'package:smile_art/view/screens/home/educational_hub.dart';
 import 'package:smile_art/view/screens/home/home.dart';
 import 'package:smile_art/view/screens/media/media.dart';
@@ -13,6 +14,7 @@ import '../home/calender.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final bottomNavBarController = Get.find<BottomNavController>();
+  final mediaController = Get.find<MediaController>;
 
   final List<Widget> screens = [
     Home(),
