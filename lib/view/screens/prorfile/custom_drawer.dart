@@ -14,6 +14,7 @@ import 'package:smile_art/view/screens/prorfile/privacy_policy.dart';
 import 'package:smile_art/view/screens/simulation/simulations.dart';
 
 import '../../../constant/app_colors.dart';
+import '../../../controller/edit_profile_controller.dart';
 import '../../../generated/assets.dart';
 import '../../widgets/common_image_widget.dart';
 import '../../widgets/log_out_dialogue.dart';
@@ -52,7 +53,8 @@ class CustomDrawer extends StatelessWidget {
                                         image: AssetImage(Assets.imagesProfileBg))),
                                 child: Padding(
                                   padding: const EdgeInsets.all(28.0),
-                                  child: CommonImageView(imagePath: Assets.imagesProfile),
+                                  child: ClipOval(
+                                      child: Obx(()=> CommonImageView(url: userModelGlobal.value.profilePicture, height: 84, width: 84,))),
                                 ),
                               ),
                               Obx(()=> MyText(text: ('${userModelGlobal.value.firstName} ${userModelGlobal.value.lastName}'), size: 18, weight: FontWeight.w600,color:kSecondaryColor,)),

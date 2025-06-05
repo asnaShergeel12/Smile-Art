@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
@@ -36,22 +37,18 @@ class ProfilePic extends StatelessWidget {
                     height: 84,
                     width: 84,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Image.network(
-                      controller.fallbackImage,
-                      height: 84,
-                      width: 84,
-                      fit: BoxFit.cover,
-                    ),
                   )
-                      : Image.network(
-                    imageUrl.isNotEmpty
+                      : CachedNetworkImage(
+                    imageUrl: imageUrl.isNotEmpty
                         ? imageUrl
                         : controller.fallbackImage,
                     height: 84,
                     width: 84,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Image.network(
-                      controller.fallbackImage,
+                    placeholder: (_, __) =>
+                    const CircularProgressIndicator(),
+                    errorWidget: (_, __, ___) => Image.asset(
+                      Assets.imagesProfileBg,
                       height: 84,
                       width: 84,
                       fit: BoxFit.cover,

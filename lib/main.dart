@@ -16,9 +16,19 @@ void main() async {
           'yhqd4dT2wO8ObobZq6rv4'
   );
 
+  // device orientation
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp
   ]);
+
+  // status bar items
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.dark, // for iOS
+    ),
+  );
+
 
   AuthService().getUserProfile();
 

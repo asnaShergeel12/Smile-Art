@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:smile_art/constant/app_colors.dart';
 import 'package:smile_art/constant/app_constants.dart';
+import 'package:smile_art/controller/edit_profile_controller.dart';
 import 'package:smile_art/view/screens/home/notifications.dart';
 import 'package:smile_art/view/widgets/common_image_widget.dart';
 import 'package:smile_art/view/widgets/my_button.dart';
 import 'package:smile_art/view/widgets/my_text_widget.dart';
-
 import '../../../generated/assets.dart';
 import '../prorfile/custom_drawer.dart';
 import 'camera_bottom_sheet.dart';
@@ -19,6 +19,7 @@ class Home extends StatelessWidget {
 
   final AdvancedDrawerController _advancedDrawerController =
       AdvancedDrawerController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +42,13 @@ class Home extends StatelessWidget {
                 onTap: () {
                   _advancedDrawerController.showDrawer();
                 },
-                child: CommonImageView(
-                  height: 44,
-                  imagePath: Assets.imagesProfile,
+                child: ClipOval(
+                  child: Obx(
+                    ()=> CommonImageView(
+                      height: 44, width: 44,
+                      url: userModelGlobal.value.profilePicture,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(

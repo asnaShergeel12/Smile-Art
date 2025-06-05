@@ -27,7 +27,6 @@ class EditProfileController extends GetxController {
         '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim();
     emailController.text = user.email ?? '';
     profilePic.value = user.profilePicture.isNotEmpty ? user.profilePicture : fallbackImage;
-    updateUserProfile();
   }
 
   Future<void> pickImage() async {
@@ -107,6 +106,10 @@ class EditProfileController extends GetxController {
         'last_name': updatedLastName,
       });
       print("User  profile updated in database. ");
+      CustomSnackbar.success(
+        title: "Success",
+        message: "Profile updated successfully.",
+      );
 
       // Fetch the latest user data to ensure the local model is updated
       final user = supabaseClient.auth.currentUser ;
@@ -125,11 +128,6 @@ class EditProfileController extends GetxController {
           print("No latest user data found.");
         }
       }
-
-      CustomSnackbar.success(
-        title: "Success",
-        message: "Profile updated successfully.",
-      );
     } catch (e) {
       CustomSnackbar.error(
         title: "Error",

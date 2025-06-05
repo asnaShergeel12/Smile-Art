@@ -38,7 +38,7 @@ class CommonImageView extends StatelessWidget {
   Widget _buildImageView() {
     if (svgPath != null && svgPath!.isNotEmpty) {
       return Animate(
-        effects: [FadeEffect(duration: Duration(milliseconds: 500))],
+        effects: const [FadeEffect(duration: Duration(milliseconds: 500))],
         child: ClipRRect(
           borderRadius: BorderRadius.circular(radius!),
           child: SizedBox(
@@ -55,7 +55,7 @@ class CommonImageView extends StatelessWidget {
       );
     } else if (file != null && file!.path.isNotEmpty) {
       return Animate(
-        effects: [FadeEffect(duration: Duration(milliseconds: 500))],
+        effects: const [FadeEffect(duration: Duration(milliseconds: 500))],
         child: ClipRRect(
           borderRadius: BorderRadius.circular(radius!),
           child: Image.file(
@@ -68,7 +68,7 @@ class CommonImageView extends StatelessWidget {
       );
     } else if (url != null && url!.isNotEmpty) {
       return Animate(
-        effects: [FadeEffect(duration: Duration(milliseconds: 500))],
+        effects: const [FadeEffect(duration: Duration(milliseconds: 500))],
         child: ClipRRect(
           borderRadius: BorderRadius.circular(radius!),
           child: CachedNetworkImage(
@@ -101,7 +101,7 @@ class CommonImageView extends StatelessWidget {
       );
     } else if (imagePath != null && imagePath!.isNotEmpty) {
       return Animate(
-        effects: [FadeEffect(duration: Duration(milliseconds: 500))],
+        effects: const [FadeEffect(duration: Duration(milliseconds: 500))],
         child: ClipRRect(
           borderRadius: BorderRadius.circular(radius!),
           child: Image.asset(
